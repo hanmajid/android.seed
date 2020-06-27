@@ -11,4 +11,10 @@
     <string name="title_login">Login</string>
     <string name="title_auth_flow">Auth Flow</string>
     <string name="title_onboarding">Onboarding</string>
+    <string name="btn_finish">Finish</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="title_chat">Chat</string>
+    <string name="btn_previous">Previous</string>
+    <string name="btn_next">Next</string>
 </resources>

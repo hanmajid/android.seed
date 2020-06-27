@@ -3,41 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/auth_nav_graph"
-    app:startDestination="@id/onboardingFragment">
+    app:startDestination="@id/onboarding_fragment">
 
 
     <fragment
-        android:id="@+id/onboardingFragment"
-        android:name="com.hanmajid.android.seed.ui.auth.OnboardingFragment"
-        android:label="fragment_onboarding"
+        android:id="@+id/onboarding_fragment"
+        android:name="com.hanmajid.android.seed.ui.onboarding.OnboardingFragment"
+        android:label="@string/title_onboarding"
         tools:layout="@layout/fragment_onboarding">
         <action
             android:id="@+id/action_onboardingFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/login_fragment" />
     </fragment>
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.hanmajid.android.seed.ui.auth.LoginFragment"
-        android:label="fragment_login"
+        android:id="@+id/login_fragment"
+        android:name="com.hanmajid.android.seed.ui.auth.login.LoginFragment"
+        android:label="@string/title_login"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            app:destination="@id/register_fragment" />
         <action
             android:id="@+id/action_loginFragment_to_nav_graph"
-            app:destination="@id/nav_graph"
-            app:popUpTo="@id/nav_graph"
+            app:destination="@id/main_nav_graph"
+            app:popUpTo="@id/main_nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/registerFragment"
+        android:id="@+id/register_fragment"
         android:name="com.hanmajid.android.seed.ui.auth.RegisterFragment"
-        android:label="fragment_register"
+        android:label="@string/title_register"
         tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_nav_graph"
-            app:destination="@id/nav_graph"
-            app:popUpTo="@id/nav_graph"
+            app:destination="@id/main_nav_graph"
+            app:popUpTo="@id/main_nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

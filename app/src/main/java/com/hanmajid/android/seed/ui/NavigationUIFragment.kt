@@ -1,18 +1,15 @@
-package com.hanmajid.android.seed.ui.home
+package com.hanmajid.android.seed.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.hanmajid.android.seed.R
-import com.hanmajid.android.seed.databinding.FragmentHomeBinding
-import com.hanmajid.android.seed.ui.AuthViewModel
-import com.hanmajid.android.seed.ui.NavigationUIFragmentDirections
+import com.hanmajid.android.seed.databinding.FragmentNavigationUIBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,18 +18,20 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
+ * Use the [NavigationUIFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class NavigationUIFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    private val authViewModel: AuthViewModel by activityViewModels()
+    private val rootFragments = setOf(
+        R.id.home_fragment,
+        R.id.about_fragment
+    )
 
-    private lateinit var binding: FragmentHomeBinding
-    private lateinit var navController: NavController
+    private lateinit var binding: FragmentNavigationUIBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,38 +45,38 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
-        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-
+        binding = FragmentNavigationUIBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupBinding()
-
-        authViewModel.authenticationState.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                AuthViewModel.AuthenticationState.UNAUTHENTICATED -> {
-                    navController.navigate(
-                        NavigationUIFragmentDirections.actionNavigationUIFragmentToAuthNavGraph()
-                    )
-                }
-                else -> {
-                }
-            }
-        })
+        setupNavigation()
     }
 
     private fun setupBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.btnChat1.setOnClickListener {
-            Navigation.findNavController(requireActivity(), R.id.navui_nav_host_fragment).navigate(
-                HomeFragmentDirections.actionHomeFragmentToChatFragment("69")
-            )
-        }
     }
 
+    private fun setupNavigation() {
+        val navController =
+            Navigation.findNavController(requireActivity(), R.id.navui_nav_host_fragment)
+        val appbarConfiguration = AppBarConfiguration(rootFragments)
+
+        // Setup Toolbar.
+        binding.toolbar.setupWithNavController(navController, appbarConfiguration)
+
+        // Setup Bottom Navigation.
+        binding.bottomNav.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (rootFragments.contains(destination.id)) {
+                binding.bottomNav.visibility = View.VISIBLE
+            } else {
+                binding.bottomNav.visibility = View.GONE
+            }
+        }
+    }
 
     companion object {
         /**
@@ -86,12 +85,12 @@ class HomeFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
+         * @return A new instance of fragment NavigationUIFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
+            NavigationUIFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

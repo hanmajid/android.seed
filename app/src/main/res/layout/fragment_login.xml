@@ -1,26 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.auth.LoginFragment">
+    tools:context=".ui.auth.login.LoginFragment">
 
-    <TextView
+    <data>
+
+        <import type="com.hanmajid.android.seed.ui.auth.login.LoginFragmentDirections" />
+
+        <variable
+            name="navController"
+            type="androidx.navigation.NavController" />
+
+        <variable
+            name="viewModel"
+            type="com.hanmajid.android.seed.ui.auth.login.LoginViewModel" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title_login" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_register" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/username"
+            app:error="@{!viewModel.loginForm.errorUsername.isEmpty() &amp;&amp; viewModel.loginForm.usernameTouched ? viewModel.loginForm.errorUsername : null}"
+            app:errorEnabled="@{!viewModel.loginForm.errorUsername.isEmpty() &amp;&amp; viewModel.loginForm.usernameTouched}">
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_login" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/username"
+                touched="@{viewModel.loginForm.usernameTouched}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:text="@={viewModel.loginForm.username}" />
 
-</LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            app:endIconMode="password_toggle"
+            app:error="@{!viewModel.loginForm.errorPassword.isEmpty() &amp;&amp; viewModel.loginForm.passwordTouched ? viewModel.loginForm.errorPassword : null}"
+            app:errorEnabled="@{!viewModel.loginForm.errorPassword.isEmpty() &amp;&amp; viewModel.loginForm.passwordTouched}">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                touched="@{viewModel.loginForm.passwordTouched}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:text="@={viewModel.loginForm.password}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.doLogin()}"
+            android:text="@string/title_login" />
+
+        <Button
+            android:id="@+id/btn_register"
+            navController="@{navController}"
+            onClickNavDirections="@{LoginFragmentDirections.actionLoginFragmentToRegisterFragment()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_register" />
+
+    </LinearLayout>
+</layout>

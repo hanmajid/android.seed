@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/navigation_ui_fragment">
+
+    <include app:graph="@navigation/auth_nav_graph" />
+    <fragment
+        android:id="@+id/navigation_ui_fragment"
+        android:name="com.hanmajid.android.seed.ui.NavigationUIFragment"
+        android:label="fragment_navigation_u_i"
+        tools:layout="@layout/fragment_navigation_u_i">
+        <action
+            android:id="@+id/action_navigationUIFragment_to_auth_nav_graph"
+            app:destination="@id/auth_nav_graph" />
+    </fragment>
+</navigation>
