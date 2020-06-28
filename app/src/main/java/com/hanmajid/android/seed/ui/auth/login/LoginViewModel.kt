@@ -23,4 +23,8 @@ class LoginViewModel : ViewModel() {
             loginState.value = LoginState.FORM_VALID
         }
     }
+
+    fun refuseLogin() {
+        loginState.value = LoginState.FORM_INVALID
+    }
 }

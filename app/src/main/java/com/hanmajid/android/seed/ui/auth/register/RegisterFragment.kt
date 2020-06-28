@@ -1,4 +1,4 @@
-package com.hanmajid.android.seed.ui.auth.login
+package com.hanmajid.android.seed.ui.auth.register
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,21 +11,20 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.hanmajid.android.seed.databinding.FragmentLoginBinding
+import com.hanmajid.android.seed.databinding.FragmentRegisterBinding
 import com.hanmajid.android.seed.ui.AuthViewModel
 
-class LoginFragment : Fragment() {
+class RegisterFragment : Fragment() {
     private val authViewModel: AuthViewModel by activityViewModels()
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: RegisterViewModel by viewModels()
 
-    private lateinit var binding: FragmentLoginBinding
+    private lateinit var binding: FragmentRegisterBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
-
+        binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -38,7 +37,7 @@ class LoginFragment : Fragment() {
                 AuthViewModel.AuthenticationState.AUTHENTICATED -> {
                     Toast.makeText(context, "Welcome, user", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(
-                        LoginFragmentDirections.actionLoginFragmentToNavGraph()
+                        RegisterFragmentDirections.actionRegisterFragmentToNavGraph()
                     )
                 }
                 AuthViewModel.AuthenticationState.INVALID_AUTHENTICATION -> {
@@ -48,36 +47,28 @@ class LoginFragment : Fragment() {
                 }
             }
         })
-        viewModel.loginState.observe(viewLifecycleOwner, Observer {
+        viewModel.registerState.observe(viewLifecycleOwner, Observer {
             when (it) {
-                LoginViewModel.LoginState.FORM_VALID -> {
-                    authViewModel.authLogin(viewModel.loginForm)
+                RegisterViewModel.RegisterState.FORM_VALID -> {
+                    authViewModel.authRegister(viewModel.registerForm)
                 }
                 else -> {
                 }
             }
         })
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            viewModel.refuseLogin()
+            viewModel.refuseRegister()
             authViewModel.refuseAuthentication()
-            requireActivity().finish()
+            findNavController().popBackStack()
         }
     }
 
     private fun setupBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-        binding.btnRegister.setOnClickListener {
-            viewModel.refuseLogin()
-            authViewModel.refuseAuthentication()
-            findNavController().navigate(
-                LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
-            )
-        }
     }
 
     companion object {
-        val TAG = "LoginFragment"
+        val TAG = "RegisterFragment"
     }
 }

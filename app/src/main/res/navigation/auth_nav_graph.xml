@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/register_fragment"
-        android:name="com.hanmajid.android.seed.ui.auth.RegisterFragment"
+        android:name="com.hanmajid.android.seed.ui.auth.register.RegisterFragment"
         android:label="@string/title_register"
         tools:layout="@layout/fragment_register">
         <action

@@ -1,20 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.auth.RegisterFragment">
+    tools:context=".ui.auth.register.RegisterFragment">
 
-    <TextView
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.hanmajid.android.seed.ui.auth.register.RegisterViewModel" />
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title_register" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_register" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/page_horizontal_margin"
+            android:layout_marginLeft="24dp"
+            android:layout_marginEnd="@dimen/page_horizontal_margin"
+            android:layout_marginRight="@dimen/page_horizontal_margin"
+            android:orientation="vertical">
 
-</LinearLayout>
+            <TextView
+                style="@style/TextAppearance.MaterialComponents.Headline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/page_vertical_margin"
+                android:text="@string/title_register" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:hint="@string/username"
+                app:error="@{!viewModel.registerForm.errorUsername.isEmpty() &amp;&amp; viewModel.registerForm.usernameTouched ? viewModel.registerForm.errorUsername : null}"
+                app:errorEnabled="@{!viewModel.registerForm.errorUsername.isEmpty() &amp;&amp; viewModel.registerForm.usernameTouched}">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/username"
+                    touched="@{viewModel.registerForm.usernameTouched}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:text="@={viewModel.registerForm.username}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/email"
+                app:error="@{!viewModel.registerForm.errorEmail.isEmpty() &amp;&amp; viewModel.registerForm.emailTouched ? viewModel.registerForm.errorEmail : null}"
+                app:errorEnabled="@{!viewModel.registerForm.errorEmail.isEmpty() &amp;&amp; viewModel.registerForm.emailTouched}">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email"
+                    touched="@{viewModel.registerForm.emailTouched}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:text="@={viewModel.registerForm.email}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/password"
+                app:endIconMode="password_toggle"
+                app:error="@{!viewModel.registerForm.errorPassword.isEmpty() &amp;&amp; viewModel.registerForm.passwordTouched ? viewModel.registerForm.errorPassword : null}"
+                app:errorEnabled="@{!viewModel.registerForm.errorPassword.isEmpty() &amp;&amp; viewModel.registerForm.passwordTouched}">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password"
+                    touched="@{viewModel.registerForm.passwordTouched}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPassword"
+                    android:text="@={viewModel.registerForm.password}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/password_confirmation"
+                app:endIconMode="password_toggle"
+                app:error="@{!viewModel.registerForm.errorPasswordCon.isEmpty() &amp;&amp; viewModel.registerForm.passwordConTouched ? viewModel.registerForm.errorPasswordCon : null}"
+                app:errorEnabled="@{!viewModel.registerForm.errorPasswordCon.isEmpty() &amp;&amp; viewModel.registerForm.passwordConTouched}">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password_confirmation"
+                    touched="@{viewModel.registerForm.passwordConTouched}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:text="@={viewModel.registerForm.passwordConfirmation}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="@dimen/page_vertical_margin"
+                android:onClick="@{() -> viewModel.doRegister()}"
+                android:text="@string/title_register" />
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

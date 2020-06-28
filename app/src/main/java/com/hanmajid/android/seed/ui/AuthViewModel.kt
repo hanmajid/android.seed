@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hanmajid.android.seed.ui.auth.login.LoginForm
+import com.hanmajid.android.seed.ui.auth.register.RegisterForm
 
 class AuthViewModel : ViewModel() {
 
@@ -29,9 +30,9 @@ class AuthViewModel : ViewModel() {
         authenticationState.value = AuthenticationState.UNAUTHENTICATED
     }
 
-    fun authenticate(loginForm: LoginForm) {
+    fun authLogin(loginForm: LoginForm) {
         // TODO: Authenticate with API.
-        Log.wtf(TAG, "Authenticate")
+        Log.wtf(TAG, "Authenticate Login")
         if (loginForm.username.value == "hanmajid") {
             authenticationState.value = AuthenticationState.AUTHENTICATED
         } else {
@@ -39,4 +40,13 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+    fun authRegister(registerForm: RegisterForm) {
+        // TODO: Authenticate with API.
+        Log.wtf(TAG, "Authenticate Register")
+        if (registerForm.username.value == "hanmajid") {
+            authenticationState.value = AuthenticationState.AUTHENTICATED
+        } else {
+            authenticationState.value = AuthenticationState.INVALID_AUTHENTICATION
+        }
+    }
 }

@@ -17,4 +17,13 @@
     <string name="title_chat">Chat</string>
     <string name="btn_previous">Previous</string>
     <string name="btn_next">Next</string>
+    <string name="onboarding_title_step_0">Welcome to Seed!</string>
+    <string name="onboarding_title_step_1">Step 1: Authenticate yourself!</string>
+    <string name="onboarding_title_step_2">Step 2: Enjoy the experience!</string>
+    <string name="onboarding_subtitle_step_0">Seed is a media that is social. Like Twitter or Facebook, but worse!</string>
+    <string name="onboarding_subtitle_step_1">Register a new account if you\'re new. Or login using your existing account.</string>
+    <string name="onboarding_subtitle_step_2">Browse around the app and have a lot of fun!</string>
+    <string name="login_not_have_account">Doesn\'t have an account?</string>
+    <string name="email">Email</string>
+    <string name="password_confirmation">Password Confirmation</string>
 </resources>
