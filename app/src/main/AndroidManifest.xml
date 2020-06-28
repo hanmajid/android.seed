@@ -15,10 +15,22 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <nav-graph android:value="@navigation/navui_nav_graph" />
         </activity>
         <uses-library
             android:name="android.test.runner"
             android:required="false" />
+
+        <receiver android:name=".widget.ChatWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/chat_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

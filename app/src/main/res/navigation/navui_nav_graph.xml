@@ -22,5 +22,7 @@
         <argument
             android:name="chatId"
             app:argType="string" />
+
+        <deepLink app:uri="www.android.hanmajid.com/{chatId}" />
     </fragment>
 </navigation>

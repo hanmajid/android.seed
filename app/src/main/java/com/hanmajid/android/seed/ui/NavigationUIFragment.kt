@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
@@ -62,19 +63,36 @@ class NavigationUIFragment : Fragment() {
     private fun setupNavigation() {
         val navController =
             Navigation.findNavController(requireActivity(), R.id.navui_nav_host_fragment)
-        val appbarConfiguration = AppBarConfiguration(rootFragments)
+        val drawerLayout = binding.drawerLayout
+        drawerLayout?.apply {
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                if (rootFragments.contains(destination.id)) {
+                    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                } else {
+                    setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                }
+            }
+        }
+        val appbarConfiguration = AppBarConfiguration(rootFragments, drawerLayout)
 
         // Setup Toolbar.
         binding.toolbar.setupWithNavController(navController, appbarConfiguration)
 
         // Setup Bottom Navigation.
-        binding.bottomNav.setupWithNavController(navController)
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (rootFragments.contains(destination.id)) {
-                binding.bottomNav.visibility = View.VISIBLE
-            } else {
-                binding.bottomNav.visibility = View.GONE
+        binding.bottomNav?.apply {
+            setupWithNavController(navController)
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                visibility = if (rootFragments.contains(destination.id)) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
             }
+        }
+
+        // Setup Drawer
+        binding.navView?.apply {
+            setupWithNavController(navController)
         }
     }
 
