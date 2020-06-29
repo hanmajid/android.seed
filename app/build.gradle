@@ -117,8 +117,30 @@ dependencies {
     // classpath.
     androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
 
+    // Paging3
+    def paging_version = "3.0.0-alpha02"
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    // alternatively - without Android dependencies for tests
+    // testImplementation "androidx.paging:paging-common:$paging_version"
+    // optional - RxJava2 support
+    // implementation "androidx.paging:paging-rxjava2:$paging_version"
+    // optional - Guava ListenableFuture support
+    // implementation "androidx.paging:paging-guava:$paging_version"
+
+    // Retrofit
+    def retrofit_version = '2.8.1'
+    def okhttp_version = '4.4.1'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:retrofit-mock:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    // Glide
+    def glide_version = "4.11.0"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+
     // TODO: Room
     // TODO: Hilt
-    // TODO: Paging
     // TODO: ...
 }

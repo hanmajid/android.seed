@@ -26,4 +26,5 @@
     <string name="login_not_have_account">Doesn\'t have an account?</string>
     <string name="email">Email</string>
     <string name="password_confirmation">Password Confirmation</string>
+    <string name="avatar">Avatar</string>
 </resources>

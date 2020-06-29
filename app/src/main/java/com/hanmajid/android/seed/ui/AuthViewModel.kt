@@ -1,6 +1,5 @@
 package com.hanmajid.android.seed.ui
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hanmajid.android.seed.ui.auth.login.LoginForm
@@ -16,13 +15,12 @@ class AuthViewModel : ViewModel() {
         INVALID_AUTHENTICATION  // Authentication failed
     }
 
-    val isFinishedOnboarding = MutableLiveData<Boolean>(true)
+    val isFinishedOnboarding = MutableLiveData<Boolean>(false)
 
     val authenticationState =
-        MutableLiveData<AuthenticationState>(AuthenticationState.AUTHENTICATED)
+        MutableLiveData<AuthenticationState>(AuthenticationState.UNAUTHENTICATED)
 
     fun finishOnboarding() {
-        Log.wtf(TAG, "finished")
         isFinishedOnboarding.value = true
     }
 
@@ -32,8 +30,7 @@ class AuthViewModel : ViewModel() {
 
     fun authLogin(loginForm: LoginForm) {
         // TODO: Authenticate with API.
-        Log.wtf(TAG, "Authenticate Login")
-        if (loginForm.username.value == "hanmajid") {
+        if (loginForm.username.value!!.isNotEmpty()) {
             authenticationState.value = AuthenticationState.AUTHENTICATED
         } else {
             authenticationState.value = AuthenticationState.INVALID_AUTHENTICATION
@@ -42,8 +39,7 @@ class AuthViewModel : ViewModel() {
 
     fun authRegister(registerForm: RegisterForm) {
         // TODO: Authenticate with API.
-        Log.wtf(TAG, "Authenticate Register")
-        if (registerForm.username.value == "hanmajid") {
+        if (registerForm.username.value!!.isNotEmpty()) {
             authenticationState.value = AuthenticationState.AUTHENTICATED
         } else {
             authenticationState.value = AuthenticationState.INVALID_AUTHENTICATION
