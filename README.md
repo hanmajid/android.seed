@@ -37,11 +37,16 @@ Please refer to Screenshots page (TODO) to see these libraries in action.
 6. Material Design
 7. Paging3
    1. ✅ Load paged data from single source (network)
-   2. ❌ Load paged data from multiple source (network & database)
+   2. ❌ Load paged data from multiple sources (network & database)
    2. ❌ Display the loading state
    3. ❌ Add item separators
-
-
+8. Hilt
+   1. ❌ Inject interface instances with `@Binds`
+   2. ✅ Inject interface with `@Provides`
+   3. ❌ Provide multiple bindings for the same type with qualifiers.
+   4. ❌ Use predefined qualifiers.
+   5. ❌ Inject dependencies to unsupported class with `@EntryPoint`.
+   6. ❌ DI Testing.
 
 ## Version
 
