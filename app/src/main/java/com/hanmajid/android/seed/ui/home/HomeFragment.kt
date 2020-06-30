@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -16,14 +14,19 @@ import com.hanmajid.android.seed.R
 import com.hanmajid.android.seed.databinding.FragmentHomeBinding
 import com.hanmajid.android.seed.ui.AuthViewModel
 import com.hanmajid.android.seed.ui.NavigationUIFragmentDirections
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
-    private val authViewModel: AuthViewModel by activityViewModels()
+    @Inject
+    lateinit var authViewModel: AuthViewModel
 
-    private lateinit var viewModel: HomeViewModel
+    @Inject
+    lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
     private lateinit var navController: NavController
     private lateinit var adapter: ChatAdapter
@@ -55,8 +58,8 @@ class HomeFragment : Fragment() {
                 }
             }
         })
-        viewModel = ViewModelProvider(this, Injection.provideViewModelFactory())
-            .get(HomeViewModel::class.java)
+//        viewModel = ViewModelProvider(this, Injection.provideViewModelFactory())
+//            .get(HomeViewModel::class.java)
 
         loadData()
     }

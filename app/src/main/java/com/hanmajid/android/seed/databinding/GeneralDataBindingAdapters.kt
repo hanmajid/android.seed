@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
-import com.bumptech.glide.Glide
+import com.hanmajid.android.seed.di.GlideApp
 
 @BindingAdapter("navController", "onClickNavDirections")
 fun onClickNavigate(button: Button?, navController: NavController?, navDirections: NavDirections?) {
@@ -32,7 +32,7 @@ fun viewPagerPositionText(textView: TextView?, position: Int?, maxPosition: Int?
 fun imgSrc(imageView: ImageView?, url: String?) {
     imageView?.apply {
         if (url != null) {
-            Glide
+            GlideApp
                 .with(context)
                 .load(url)
                 .into(this)

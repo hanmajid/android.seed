@@ -16,7 +16,8 @@ class ChatPagingSource(
             LoadResult.Page(
                 data = response,
                 prevKey = if (position == 0) null else position - 1,
-                nextKey = if (response.isEmpty()) null else position + 1
+//                nextKey = if (response.isEmpty()) null else position + 1
+                nextKey = if (position >= 5) null else position + 1
             )
         } catch (e: IOException) {
             return LoadResult.Error(e)

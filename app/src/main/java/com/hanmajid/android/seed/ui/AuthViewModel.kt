@@ -4,8 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hanmajid.android.seed.ui.auth.login.LoginForm
 import com.hanmajid.android.seed.ui.auth.register.RegisterForm
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthViewModel : ViewModel() {
+@Singleton
+class AuthViewModel @Inject constructor() : ViewModel() {
 
     private val TAG = "AuthViewModel"
 

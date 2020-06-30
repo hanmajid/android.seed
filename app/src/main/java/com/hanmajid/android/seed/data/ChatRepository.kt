@@ -6,8 +6,9 @@ import androidx.paging.PagingData
 import com.hanmajid.android.seed.api.AppService
 import com.hanmajid.android.seed.model.Chat
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ChatRepository(
+class ChatRepository @Inject constructor(
     private val service: AppService
 ) {
 

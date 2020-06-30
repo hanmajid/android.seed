@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: "kotlin-kapt"
-apply plugin: "androidx.navigation.safeargs"
+apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 29
@@ -138,9 +139,13 @@ dependencies {
     // Glide
     def glide_version = "4.11.0"
     implementation "com.github.bumptech.glide:glide:$glide_version"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+
+    // Hilt
+    def hilt_version = "2.28-alpha"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // TODO: Room
-    // TODO: Hilt
     // TODO: ...
 }
