@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hanmajid.android.seed.R
 import com.hanmajid.android.seed.databinding.FragmentHomeBinding
 import com.hanmajid.android.seed.ui.AuthViewModel
@@ -58,8 +59,6 @@ class HomeFragment : Fragment() {
                 }
             }
         })
-//        viewModel = ViewModelProvider(this, Injection.provideViewModelFactory())
-//            .get(HomeViewModel::class.java)
 
         loadData()
     }
@@ -70,6 +69,13 @@ class HomeFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         binding.recyclerView.addItemDecoration(decoration)
+
+        // Scroll RecyclerView to top if Home icon is reselected.
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.setOnNavigationItemReselectedListener {
+            binding.recyclerView.smoothScrollToPosition(0)
+        }
+
     }
 
     private fun loadData() {
@@ -79,5 +85,9 @@ class HomeFragment : Fragment() {
                 adapter.submitData(it)
             }
         }
+    }
+
+    companion object {
+        const val TAG = "HomeFragment"
     }
 }

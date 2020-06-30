@@ -9,20 +9,35 @@
         android:id="@+id/home_fragment"
         android:name="com.hanmajid.android.seed.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_homeFragment_to_chatFragment"
-            app:destination="@id/chat_fragment" />
-    </fragment>
+        tools:layout="@layout/fragment_home" />
     <fragment
-        android:id="@+id/chat_fragment"
-        android:name="com.hanmajid.android.seed.ChatFragment"
-        android:label="@string/title_chat"
-        tools:layout="@layout/fragment_chat">
+        android:id="@+id/chat_detail_fragment"
+        android:name="com.hanmajid.android.seed.ui.chat.detail.ChatDetailFragment"
+        android:label="@string/title_chat_detail"
+        tools:layout="@layout/fragment_chat_detail">
         <argument
             android:name="chatId"
             app:argType="string" />
 
         <deepLink app:uri="www.android.hanmajid.com/{chatId}" />
     </fragment>
+    <fragment
+        android:id="@+id/chat_fragment"
+        android:name="com.hanmajid.android.seed.ui.chat.ChatFragment"
+        android:label="@string/title_chat"
+        tools:layout="@layout/fragment_chat" >
+        <action
+            android:id="@+id/action_chat_fragment_to_chat_detail_fragment"
+            app:destination="@id/chat_detail_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profile_fragment"
+        android:name="com.hanmajid.android.seed.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/explore_fragment"
+        android:name="com.hanmajid.android.seed.ui.explore.ExploreFragment"
+        android:label="@string/title_explore"
+        tools:layout="@layout/fragment_explore" />
 </navigation>

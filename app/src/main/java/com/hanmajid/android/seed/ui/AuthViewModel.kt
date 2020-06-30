@@ -18,10 +18,10 @@ class AuthViewModel @Inject constructor() : ViewModel() {
         INVALID_AUTHENTICATION  // Authentication failed
     }
 
-    val isFinishedOnboarding = MutableLiveData<Boolean>(false)
+    val isFinishedOnboarding = MutableLiveData<Boolean>(true)
 
     val authenticationState =
-        MutableLiveData<AuthenticationState>(AuthenticationState.UNAUTHENTICATED)
+        MutableLiveData<AuthenticationState>(AuthenticationState.AUTHENTICATED)
 
     fun finishOnboarding() {
         isFinishedOnboarding.value = true

@@ -27,4 +27,7 @@
     <string name="email">Email</string>
     <string name="password_confirmation">Password Confirmation</string>
     <string name="avatar">Avatar</string>
+    <string name="title_chat_detail">Chat</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_explore">Explore</string>
 </resources>

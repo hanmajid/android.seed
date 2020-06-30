@@ -23,7 +23,7 @@ class ChatWidgetProvider : AppWidgetProvider() {
         args.putString("chatId", "420")
         val pendingIntent = NavDeepLinkBuilder(context)
             .setGraph(R.navigation.navui_nav_graph)
-            .setDestination(R.id.chat_fragment)
+            .setDestination(R.id.chat_detail_fragment)
             .setArguments(args)
             .createPendingIntent()
 
