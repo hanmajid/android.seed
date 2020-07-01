@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -15,12 +16,10 @@ import com.hanmajid.android.seed.databinding.FragmentOnboardingBinding
 import com.hanmajid.android.seed.ui.AuthViewModel
 import com.hanmajid.android.seed.ui.onboarding.step.OnboardingStepFragment
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class OnboardingFragment : Fragment() {
-    @Inject
-    lateinit var authViewModel: AuthViewModel
+    private val authViewModel: AuthViewModel by activityViewModels()
     private val viewModel: OnboardingViewModel by viewModels()
 
     private lateinit var binding: FragmentOnboardingBinding

@@ -1,9 +1,14 @@
 package com.hanmajid.android.seed.ui.auth.login
 
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel @ViewModelInject constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     private val TAG = "LoginViewModel"
 

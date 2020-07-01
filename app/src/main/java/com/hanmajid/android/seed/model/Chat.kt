@@ -1,12 +1,16 @@
 package com.hanmajid.android.seed.model
 
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "chats")
 data class Chat(
-    @field:SerializedName("id") val id: Long,
+    @PrimaryKey @field:SerializedName("id") val id: Long,
     @field:SerializedName("name") val name: String,
     @field:SerializedName("avatarPath") val avatarPath: String,
-    @field:SerializedName("lastMessage") val lastMessage: Message
+    @Embedded @field:SerializedName("lastMessage") val lastMessage: Message?
 )
 
 data class Message(

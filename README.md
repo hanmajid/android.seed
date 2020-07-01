@@ -37,16 +37,28 @@ Please refer to Screenshots page (TODO) to see these libraries in action.
 6. Material Design
 7. Paging3
    1. ✅ Load paged data from single source (network)
-   2. ❌ Load paged data from multiple sources (network & database)
-   2. ❌ Display the loading state
-   3. ❌ Add item separators
+   2. ✅ Load paged data from multiple sources (network & database)
+   3. Display the loading state
+      1. ✅ Using `loadStateFlow` for general UI.
+      2. ❌ Using `LoadStateAdapter` for header/footer.
+   4. ❌ Add item separators
 8. Hilt
    1. ❌ Inject interface instances with `@Binds`
    2. ✅ Inject interface with `@Provides`
    3. ❌ Provide multiple bindings for the same type with qualifiers.
-   4. ❌ Use predefined qualifiers.
+   4. ✅ Use predefined qualifiers (`@ApplicationContext`).
    5. ❌ Inject dependencies to unsupported class with `@EntryPoint`.
    6. ❌ DI Testing.
+   7. Jetpack integrations: with ViewModel via `@ViewModelInject` (✅) and with WorkManager via `@WorkerInject` (❌).
+9. Room
+
+### TODO
+
+1. WorkManager
+2. Palette
+3. Emoji
+4. Preferences
+5. ...
 
 ## Version
 

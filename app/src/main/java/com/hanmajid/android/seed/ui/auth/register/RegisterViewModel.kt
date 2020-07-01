@@ -1,9 +1,14 @@
 package com.hanmajid.android.seed.ui.auth.register
 
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 
-class RegisterViewModel : ViewModel() {
+class RegisterViewModel @ViewModelInject constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
     private val TAG = "RegisterViewModel"
 
     enum class RegisterState {
