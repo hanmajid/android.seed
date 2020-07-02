@@ -1,11 +1,17 @@
 package com.hanmajid.android.seed.db
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "remote_keys")
+@Entity(
+    tableName = "remote_keys",
+    primaryKeys = [
+        "remoteId",
+        "type"
+    ]
+)
 data class RemoteKeys(
-    @PrimaryKey val chatId: Long,
+    val remoteId: Long,
+    val type: String,
     val prevKey: Int?,
     val nextKey: Int?
 )

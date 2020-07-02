@@ -20,6 +20,7 @@ import com.hanmajid.android.seed.R
 import com.hanmajid.android.seed.databinding.FragmentHomeBinding
 import com.hanmajid.android.seed.ui.AuthViewModel
 import com.hanmajid.android.seed.ui.NavigationUIFragmentDirections
+import com.hanmajid.android.seed.ui.chat.ChatAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job

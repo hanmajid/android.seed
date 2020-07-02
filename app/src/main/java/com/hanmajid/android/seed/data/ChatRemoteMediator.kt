@@ -1,5 +1,6 @@
 package com.hanmajid.android.seed.data
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -9,6 +10,7 @@ import com.hanmajid.android.seed.api.AppService
 import com.hanmajid.android.seed.db.AppDatabase
 import com.hanmajid.android.seed.db.RemoteKeys
 import com.hanmajid.android.seed.model.Chat
+import com.hanmajid.android.seed.util.PagingUtil
 import retrofit2.HttpException
 import java.io.IOException
 import java.io.InvalidObjectException
@@ -21,11 +23,19 @@ class ChatRemoteMediator(
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Chat>): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> {
-                val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
+                Log.wtf(TAG, "Refresh")
+                val remoteKeys = PagingUtil.getRemoteKeyClosestToCurrentPosition(
+                    state as PagingState<Int, PagingItem>,
+                    database
+                )
                 remoteKeys?.nextKey?.minus(1) ?: 0
             }
             LoadType.PREPEND -> {
-                val remoteKeys = getRemoteKeyForFirstItem(state)
+                Log.wtf(TAG, "Prepend")
+                val remoteKeys = PagingUtil.getRemoteKeyForFirstItem(
+                    state as PagingState<Int, PagingItem>,
+                    database
+                )
                 if (remoteKeys == null) {
                     // The LoadType is PREPEND so some data was loaded before,
                     // so we should have been able to get remote keys
@@ -40,7 +50,11 @@ class ChatRemoteMediator(
                 remoteKeys.prevKey
             }
             LoadType.APPEND -> {
-                val remoteKeys = getRemoteKeyForLastItem(state)
+                Log.wtf(TAG, "Append")
+                val remoteKeys = PagingUtil.getRemoteKeyForLastItem(
+                    state as PagingState<Int, PagingItem>,
+                    database
+                )
                 if (remoteKeys == null) {
                     throw InvalidObjectException("Remote key should not be null for $loadType")
                 }
@@ -51,12 +65,13 @@ class ChatRemoteMediator(
                 remoteKeys.nextKey
             }
         }
+        Log.wtf(TAG, "Page: $page")
 
         try {
             val response = service.getChats(page, state.config.pageSize)
 
             val chats = response
-            val endOfPaginationReached = true
+            val endOfPaginationReached = page == 1
             database.withTransaction {
                 // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
@@ -66,7 +81,12 @@ class ChatRemoteMediator(
                 val prevKey = if (page == 0) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val keys = chats.map {
-                    RemoteKeys(chatId = it.id, prevKey = prevKey, nextKey = nextKey)
+                    RemoteKeys(
+                        remoteId = it.id,
+                        type = TAG,
+                        prevKey = prevKey,
+                        nextKey = nextKey
+                    )
                 }
                 database.remoteKeysDao().insertAll(keys)
                 database.chatDao().insertAll(chats)
@@ -76,38 +96,6 @@ class ChatRemoteMediator(
             return MediatorResult.Error(e)
         } catch (e: HttpException) {
             return MediatorResult.Error(e)
-        }
-    }
-
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, Chat>): RemoteKeys? {
-        // Get the last page that was retrieved, that contained items.
-        // From that last page, get the last item
-        return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let { chat ->
-                // Get the remote keys of the last item retrieved
-                database.remoteKeysDao().remoteKeysChatId(chat.id)
-            }
-    }
-
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, Chat>): RemoteKeys? {
-        // Get the first page that was retrieved, that contained items.
-        // From that first page, get the first item
-        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
-            ?.let { chat ->
-                // Get the remote keys of the first items retrieved
-                database.remoteKeysDao().remoteKeysChatId(chat.id)
-            }
-    }
-
-    private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, Chat>
-    ): RemoteKeys? {
-        // The paging library is trying to load data after the anchor position
-        // Get the item closest to the anchor position
-        return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.id?.let { chatId ->
-                database.remoteKeysDao().remoteKeysChatId(chatId)
-            }
         }
     }
 

@@ -34,6 +34,6 @@ class ChatRepository @Inject constructor(
     }
 
     companion object {
-        private const val NETWORK_PAGE_SIZE = 2
+        private const val NETWORK_PAGE_SIZE = 10
     }
 }

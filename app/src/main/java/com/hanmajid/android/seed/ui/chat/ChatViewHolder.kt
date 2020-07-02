@@ -1,4 +1,4 @@
-package com.hanmajid.android.seed.ui.home
+package com.hanmajid.android.seed.ui.chat
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

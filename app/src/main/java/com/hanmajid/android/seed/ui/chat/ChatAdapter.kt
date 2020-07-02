@@ -1,4 +1,4 @@
-package com.hanmajid.android.seed.ui.home
+package com.hanmajid.android.seed.ui.chat
 
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -26,6 +26,8 @@ class ChatAdapter : PagingDataAdapter<Chat, RecyclerView.ViewHolder>(CHAT_COMPAR
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ChatViewHolder.create(parent)
+        return ChatViewHolder.create(
+            parent
+        )
     }
 }
