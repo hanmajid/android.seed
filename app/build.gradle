@@ -17,6 +17,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.incremental": "true"
+                ]
+            }
+        }
     }
 
     buildTypes {
@@ -162,8 +170,10 @@ dependencies {
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
+    // Palette
+    implementation "androidx.palette:palette:1.0.0"
+
     // TODO: WorkManager
-    // TODO: Palette
     // TODO: Emoji
     // TODO: Preferences
     // TODO: ...

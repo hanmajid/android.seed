@@ -44,25 +44,13 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupBinding()
-
-        authViewModel.authenticationState.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                AuthViewModel.AuthenticationState.UNAUTHENTICATED -> {
-                    navController.navigate(
-                        NavigationUIFragmentDirections.actionNavigationUIFragmentToAuthNavGraph()
-                    )
-                }
-                else -> {
-                }
-            }
-        })
+        setupViewModel()
 
         loadData()
     }
@@ -103,11 +91,25 @@ class HomeFragment : Fragment() {
         binding.btnRetry.setOnClickListener { adapter.retry() }
 
         // Scroll RecyclerView to top if Home icon is reselected.
-        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav)
-        bottomNav.setOnNavigationItemReselectedListener {
+        val bottomNav: BottomNavigationView? =
+            requireActivity().findViewById(R.id.bottom_nav)
+        bottomNav?.setOnNavigationItemReselectedListener {
             binding.recyclerView.smoothScrollToPosition(0)
         }
+    }
 
+    private fun setupViewModel() {
+        authViewModel.authenticationState.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                AuthViewModel.AuthenticationState.UNAUTHENTICATED -> {
+                    navController.navigate(
+                        NavigationUIFragmentDirections.actionNavigationUIFragmentToAuthNavGraph()
+                    )
+                }
+                else -> {
+                }
+            }
+        })
     }
 
     private fun loadData() {
