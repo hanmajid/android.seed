@@ -13,6 +13,7 @@ Please refer to Screenshots page (TODO) to see these features in action.
 * Onboarding page for first-time user
 * Login page
 * Register page
+* Profile page
 * TBD
 
 ## Libraries
@@ -53,14 +54,14 @@ Please refer to Screenshots page (TODO) to see these libraries in action.
       1. ✅ with ViewModel via `@ViewModelInject`
       2. ❌ with WorkManager via `@WorkerInject`
 9. Room
+10. Palette: Set banner color in Profile page based on profile picture's color palette
 
 ### TODO
 
 1. WorkManager
-2. Palette
-3. Emoji
-4. Preferences
-5. ...
+2. Emoji
+3. Preferences
+4. ...
 
 ## Version
 
