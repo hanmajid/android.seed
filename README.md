@@ -8,10 +8,14 @@ A social media prototype that demonstrates the usage of Android Jetpack librarie
 
 ## Features
 
-Please refer to Screenshots page (TODO) to see these features in action.
-
 * Onboarding page for first-time user
+
+  ![Onboarding page screenshot](screenshots/onboarding_page.gif?raw=true)
+
 * Login page
+
+  ![Login page screenshot](screenshots/login_page.gif?raw=true)
+  
 * Register page
 * Profile page
 * TBD
