@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hanmajid.android.seed.R
 import com.hanmajid.android.seed.databinding.FragmentChatBinding
@@ -84,8 +83,6 @@ class ChatFragment : Fragment() {
 
         // RecyclerView
         binding.recyclerView.adapter = adapter
-        val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        binding.recyclerView.addItemDecoration(decoration)
 
         // Retry button
         binding.btnRetry.setOnClickListener { adapter.retry() }

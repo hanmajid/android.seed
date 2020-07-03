@@ -1,7 +1,7 @@
 package com.hanmajid.android.seed.model
 
 data class User(
-    val id: Long,
+    val id: String,
     val email: String,
     val username: String,
     val name: String?,

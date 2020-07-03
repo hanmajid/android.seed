@@ -11,7 +11,7 @@ import com.hanmajid.android.seed.model.Post
         RemoteKeys::class,
         Post::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

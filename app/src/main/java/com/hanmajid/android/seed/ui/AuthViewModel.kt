@@ -30,16 +30,28 @@ class AuthViewModel @ViewModelInject constructor(
 
     val loggedInUser = MutableLiveData<User>()
 
+    val allUsers = listOf(
+        User(
+            "2",
+            "hanmajid@gmail.com",
+            "@hanmajid",
+            "Muhammad Farhan Majid",
+            "https://pbs.twimg.com/profile_images/1278222393220034560/a8OqzwjZ_400x400.jpg",
+            null
+        ),
+        User(
+            "3",
+            "hanmajid@gmail.com",
+            "@mydude",
+            "Its Wednesday",
+            "https://pbs.twimg.com/profile_images/738161643570356225/e7poYrfJ_400x400.jpg",
+            null
+        )
+    )
+
     init {
         setUser(
-            User(
-                1,
-                "hanmajid@gmail.com",
-                "@hanmajid",
-                "Muhammad Farhan Majid",
-                "https://api.adorable.io/avatars/285/abott@adorable.png",
-                null
-            )
+            allUsers[0]
         )
     }
 
@@ -60,6 +72,12 @@ class AuthViewModel @ViewModelInject constructor(
                 }
             }
         }
+    }
+
+    fun getUserById(id: String): User = allUsers.firstOrNull { it.id == id } ?: allUsers[0]
+
+    fun logout() {
+        authenticationState.value = AuthenticationState.UNAUTHENTICATED
     }
 
     fun finishOnboarding() {

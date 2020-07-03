@@ -31,4 +31,6 @@
     <string name="title_profile">Profile</string>
     <string name="title_explore">Explore</string>
     <string name="btn_retry">Retry</string>
+    <string name="title_post">Post</string>
+    <string name="title_user">User</string>
 </resources>

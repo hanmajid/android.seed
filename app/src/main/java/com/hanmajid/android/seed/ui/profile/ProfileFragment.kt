@@ -37,12 +37,6 @@ class ProfileFragment : Fragment() {
 
     private fun setupBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
-        val rootFragments = setOf(
-            R.id.home_fragment,
-            R.id.explore_fragment,
-            R.id.chat_fragment,
-            R.id.profile_fragment
-        )
 
         val adapter = ProfilePagerAdapter(this)
         binding.viewPager.adapter = adapter
