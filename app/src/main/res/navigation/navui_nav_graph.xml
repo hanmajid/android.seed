@@ -62,4 +62,10 @@
             app:argType="string" />
     </fragment>
     <action android:id="@+id/action_global_user_fragment" app:destination="@id/user_fragment" />
+    <fragment
+        android:id="@+id/camera_fragment"
+        android:name="com.hanmajid.android.seed.ui.camera.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
+    <action android:id="@+id/action_global_cameraFragment" app:destination="@id/camera_fragment" />
 </navigation>

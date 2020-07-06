@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -51,6 +52,10 @@ class NavigationUIFragment : Fragment() {
     private fun setupNavigation() {
         val navController =
             Navigation.findNavController(requireActivity(), R.id.navui_nav_host_fragment)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.toolbar.isVisible = destination.id != R.id.camera_fragment
+        }
+
         val drawerLayout = binding.drawerLayout
         drawerLayout?.apply {
             navController.addOnDestinationChangedListener { _, destination, _ ->

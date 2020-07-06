@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.hanmajid.android.seed"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -172,6 +172,18 @@ dependencies {
 
     // Palette
     implementation "androidx.palette:palette:1.0.0"
+
+    // CameraX
+    def camerax_version = "1.0.0-beta06"
+    // The following line is optional, as the core library is included indirectly by camera-camera2
+    implementation "androidx.camera:camera-core:${camerax_version}"
+    implementation "androidx.camera:camera-camera2:${camerax_version}"
+    // If you want to additionally use the CameraX Lifecycle library
+    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
+    // If you want to additionally use the CameraX View class
+    implementation "androidx.camera:camera-view:1.0.0-alpha13"
+    // If you want to additionally use the CameraX Extensions library
+    // implementation "androidx.camera:camera-extensions:1.0.0-alpha13"
 
     // TODO: WorkManager
     // TODO: Emoji
