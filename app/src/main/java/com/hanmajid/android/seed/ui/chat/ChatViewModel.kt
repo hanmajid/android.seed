@@ -2,6 +2,7 @@ package com.hanmajid.android.seed.ui.chat
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,4 +28,6 @@ class ChatViewModel @ViewModelInject constructor(
         currentResult = newResult
         return newResult
     }
+
+    val chatLiveData: LiveData<PagingData<Chat>> = repository.getChatsLiveData()
 }

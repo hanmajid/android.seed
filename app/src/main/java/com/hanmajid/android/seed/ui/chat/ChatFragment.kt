@@ -1,6 +1,7 @@
 package com.hanmajid.android.seed.ui.chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +52,15 @@ class ChatFragment : Fragment() {
         setupBinding()
         setupViewModel()
 
-        loadData()
+//        loadData()
+        viewModel.chatLiveData.observe(viewLifecycleOwner, Observer {
+            lifecycleScope.launch {
+                it?.apply {
+                    Log.wtf(TAG, "Update data...")
+                    adapter.submitData(this)
+                }
+            }
+        })
     }
 
     private fun setupBinding() {
