@@ -44,6 +44,18 @@ class ExploreFragment : Fragment() {
             )
         }
 
+        binding.webviewButton.setOnClickListener {
+            findNavController().navigate(
+                ExploreFragmentDirections.actionExploreFragmentToUserGuideActivity()
+            )
+        }
+
+        binding.wifiButton.setOnClickListener {
+            findNavController().navigate(
+                ExploreFragmentDirections.actionExploreFragmentToWifiFragment()
+            )
+        }
+
         // TODO: Security > Show an app chooser
         binding.shareButton.setOnClickListener {
             val callIntent: Intent = Uri.parse("tel:5551234").let { number ->

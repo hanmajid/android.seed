@@ -39,7 +39,14 @@
         android:id="@+id/explore_fragment"
         android:name="com.hanmajid.android.seed.ui.explore.ExploreFragment"
         android:label="@string/title_explore"
-        tools:layout="@layout/fragment_explore" />
+        tools:layout="@layout/fragment_explore" >
+        <action
+            android:id="@+id/action_explore_fragment_to_userGuideActivity"
+            app:destination="@id/userGuideActivity" />
+        <action
+            android:id="@+id/action_explore_fragment_to_wifiFragment"
+            app:destination="@id/wifiFragment" />
+    </fragment>
     <fragment
         android:id="@+id/post_fragment"
         android:name="com.hanmajid.android.seed.ui.post.PostFragment"
@@ -68,4 +75,13 @@
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" />
     <action android:id="@+id/action_global_cameraFragment" app:destination="@id/camera_fragment" />
+    <activity
+        android:id="@+id/userGuideActivity"
+        android:name="com.hanmajid.android.seed.ui.userguide.UserGuideActivity"
+        android:label="activity_user_guide"
+        tools:layout="@layout/activity_user_guide" />
+    <fragment
+        android:id="@+id/wifiFragment"
+        android:name="com.hanmajid.android.seed.ui.connectivity.wifi.WifiFragment"
+        android:label="WifiFragment" />
 </navigation>

@@ -185,6 +185,10 @@ dependencies {
     // If you want to additionally use the CameraX Extensions library
     // implementation "androidx.camera:camera-extensions:1.0.0-alpha13"
 
+    // AndroidX: Webkit
+    def ax_webkit_version = "1.2.0"
+    implementation "androidx.webkit:webkit:$ax_webkit_version"
+
     // TODO: WorkManager
     // TODO: Emoji
     // TODO: Preferences
