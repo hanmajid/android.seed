@@ -44,8 +44,6 @@ class WifiScanBroadcastReceiver(
         val intentFilter = IntentFilter()
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
         context.registerReceiver(wifiScanReceiver, intentFilter)
-
-        WifiUtil.startScanning(wifiManager, distinctSSID, scanFailure)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)

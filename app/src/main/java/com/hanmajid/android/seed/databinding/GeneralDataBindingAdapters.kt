@@ -3,12 +3,18 @@ package com.hanmajid.android.seed.databinding
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.hanmajid.android.seed.di.GlideApp
+
+@BindingAdapter("hidden")
+fun setHidden(view: View?, hide: Boolean?) {
+    view?.isVisible = hide != true
+}
 
 @BindingAdapter("navController", "onClickNavDirections")
 fun onClickNavigate(
