@@ -1,8 +1,10 @@
 package com.hanmajid.android.seed.data
 
+import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.hanmajid.android.seed.api.AppService
 import com.hanmajid.android.seed.db.AppDatabase
 import com.hanmajid.android.seed.model.Chat
@@ -31,6 +33,19 @@ class ChatRepository @Inject constructor(
             ),
             pagingSourceFactory = pagingSourceFactory
         ).flow
+    }
+
+    fun getChatsLiveData(): LiveData<PagingData<Chat>> {
+        val pagingSourceFactory = { database.chatDao().getAllChats() }
+
+        return Pager(
+            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
+            remoteMediator = ChatRemoteMediator(
+                service,
+                database
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).liveData
     }
 
     companion object {

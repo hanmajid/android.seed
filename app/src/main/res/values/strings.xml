@@ -34,4 +34,5 @@
     <string name="title_post">Post</string>
     <string name="title_user">User</string>
     <string name="btn_take_picture">Take Picture</string>
+    <string name="share_text_chooser_title">Share this text with</string>
 </resources>
