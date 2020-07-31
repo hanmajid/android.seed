@@ -44,8 +44,8 @@
             android:id="@+id/action_explore_fragment_to_userGuideActivity"
             app:destination="@id/userGuideActivity" />
         <action
-            android:id="@+id/action_explore_fragment_to_wifiFragment"
-            app:destination="@id/wifiFragment" />
+            android:id="@+id/action_explore_fragment_to_connectivity_nav_graph"
+            app:destination="@id/connectivity_nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/post_fragment"
@@ -80,8 +80,5 @@
         android:name="com.hanmajid.android.seed.ui.userguide.UserGuideActivity"
         android:label="activity_user_guide"
         tools:layout="@layout/activity_user_guide" />
-    <fragment
-        android:id="@+id/wifiFragment"
-        android:name="com.hanmajid.android.seed.ui.connectivity.wifi.WifiFragment"
-        android:label="WifiFragment" />
+    <include app:graph="@navigation/connectivity_nav_graph" />
 </navigation>

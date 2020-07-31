@@ -1,4 +1,4 @@
-package com.hanmajid.android.seed.ui.connectivity.wifi
+package com.hanmajid.android.seed.ui.connectivity.wifi.scan
 
 import android.net.wifi.ScanResult
 import android.view.LayoutInflater
@@ -48,7 +48,9 @@ class WifiListAdapter : ListAdapter<ScanResult, RecyclerView.ViewHolder>(WIFI_CO
                     parent,
                     false
                 )
-                return WifiViewHolder(binding)
+                return WifiViewHolder(
+                    binding
+                )
             }
         }
     }

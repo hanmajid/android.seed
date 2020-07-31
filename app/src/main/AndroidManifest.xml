@@ -4,10 +4,21 @@
 
     <uses-feature android:name="android.hardware.camera.any" />
 
+    <!-- Wifi state, Wifi scanning, Wifi p2p -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- Wifi state, Wifi scanning, Wifi p2p -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Wifi scanning, Wifi p2p -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- Wifi p2p -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Wifi p2p -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <!-- Wifi scanning, Wifi p2p -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- CameraX -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
