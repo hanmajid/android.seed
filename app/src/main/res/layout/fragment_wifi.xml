@@ -1,91 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.connectivity.wifi.WifiFragment">
 
-    <data>
-
-        <variable
-            name="isLocationDisabled"
-            type="Boolean" />
-
-        <variable
-            name="isPermissionDenied"
-            type="Boolean" />
-
-        <variable
-            name="adapter"
-            type="com.hanmajid.android.seed.ui.connectivity.wifi.WifiListAdapter" />
-
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.connectivity.wifi.WifiFragment">
+        android:layout_height="match_parent">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    hidden="@{!isLocationDisabled}"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/wifi_status"
+                    style="@style/TextAppearance.MaterialComponents.Body1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="gone">
+                    tools:text="Wi-Fi Status: -" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="You should enable location " />
-
-                    <Button
-                        android:id="@+id/button_location_settings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Open Location Settings" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    hidden="@{!isPermissionDenied}"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/connected_wifi"
+                    style="@style/TextAppearance.MaterialComponents.Body1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="gone">
+                    tools:text="Connected Wi-Fi: -" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="You should grant location permission" />
+                <Button
+                    android:id="@+id/button_wifi_settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Open Wi-Fi Settings" />
 
-                    <Button
-                        android:id="@+id/button_app_settings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Open App Settings" />
+                <TextView
+                    android:id="@+id/wifi_p2p_status"
+                    style="@style/TextAppearance.MaterialComponents.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="P2P: Supported" />
 
-                </LinearLayout>
+                <Button
+                    android:id="@+id/button_wifi_scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wifi Scan" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    hidden="@{isLocationDisabled || isPermissionDenied}"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_wifi" />
+                <Button
+                    android:id="@+id/button_wifi_p2p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wifi P2P" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

@@ -2,28 +2,29 @@ package com.hanmajid.android.seed.ui.connectivity.wifi
 
 import android.content.Context
 import android.content.Intent
-import android.location.LocationManager
-import android.net.Uri
-import android.net.wifi.ScanResult
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.location.LocationManagerCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.hanmajid.android.seed.databinding.FragmentWifiBinding
-import com.hanmajid.android.seed.util.PermissionUtil
 
 class WifiFragment : Fragment() {
 
     private lateinit var binding: FragmentWifiBinding
-    private lateinit var wifiManager: WifiManager
-    private lateinit var locationManager: LocationManager
 
-    private val adapter = WifiListAdapter()
+    private val wifiManager: WifiManager by lazy(LazyThreadSafetyMode.NONE) {
+        requireContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    }
+    private val connectivityManager: ConnectivityManager by lazy(LazyThreadSafetyMode.NONE) {
+        requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,112 +38,96 @@ class WifiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupBinding()
 
-        locationManager =
-            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        // Step 1. Get WifiManager from systemService.
-        wifiManager = requireContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-        // Step 2. Instantiate [WifiScanBroadcastReceiver]
-        WifiScanBroadcastReceiver(
-            viewLifecycleOwner,
-            requireContext(),
-            wifiManager,
-            true,
-            { scanResults ->
-                updateList(scanResults, true)
-            }, { scanResults ->
-                updateList(scanResults, false)
-            }
+        // Listen to connected Wi-Fi changes here.
+        val networkResult = NetworkRequest.Builder().build()
+        connectivityManager.registerNetworkCallback(
+            networkResult,
+            MyConnectivityManager(requireContext())
         )
 
-        refreshScan()
+        // Listen to Wi-Fi state changes here.
+        WifiStateBroadcastListener(
+            viewLifecycleOwner,
+            requireContext(),
+            { prevState, state ->
+                updateWifiStatusText(state)
+            }, {
+                updateConnectedWifiText()
+            }
+        )
     }
 
     private fun setupBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.recyclerView.adapter = adapter
-        binding.swipeRefresh.isRefreshing = true
+        updateWifiStatusText(wifiManager.wifiState)
+        updateConnectedWifiText()
 
-        binding.buttonLocationSettings.setOnClickListener {
+        binding.wifiP2pStatus.text =
+            if (wifiManager.isP2pSupported) "P2P: Supported" else "P2P: Not supported"
+
+        binding.buttonWifiScan.setOnClickListener {
+            findNavController().navigate(
+                WifiFragmentDirections.actionWifiFragmentToWifiScanFragment()
+            )
+        }
+
+        binding.buttonWifiP2p.setOnClickListener {
+            findNavController().navigate(
+                WifiFragmentDirections.actionWifiFragmentToWifiP2pFragment()
+            )
+        }
+
+        binding.buttonWifiSettings.setOnClickListener {
             startActivity(
                 Intent(
-                    Settings.ACTION_LOCATION_SOURCE_SETTINGS
+                    Settings.ACTION_WIFI_SETTINGS
                 )
             )
         }
 
-        binding.buttonAppSettings.setOnClickListener {
-            startActivity(
-                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", requireActivity().packageName, null)
-                }
-            )
-        }
-
         binding.swipeRefresh.setOnRefreshListener {
-            refreshScan()
-        }
-    }
-
-    private fun refreshScan() {
-        binding.isPermissionDenied = false
-        if (PermissionUtil.allPermissionsGranted(requireContext(), REQUIRED_PERMISSIONS)) {
-            doWifiScan()
-        } else {
-            PermissionUtil.requestAllPermissions(
-                this,
-                binding.root,
-                REQUIRED_PERMISSIONS,
-                REQUEST_CODE_PERMISSIONS
-            )
-        }
-    }
-
-    // Called when first instantiating
-    private fun doWifiScan() {
-        val isLocationEnabled = LocationManagerCompat.isLocationEnabled(locationManager)
-        binding.isLocationDisabled = !isLocationEnabled
-        if (isLocationEnabled) {
-            WifiUtil.startScanning(wifiManager, true) { scanResults ->
-                updateList(scanResults, false)
-            }
-        } else {
+            updateWifiStatusText(wifiManager.wifiState)
+            updateConnectedWifiText()
             binding.swipeRefresh.isRefreshing = false
         }
     }
 
-    private fun updateList(scanResults: List<ScanResult>, success: Boolean) {
-        if (!success) {
-            Toast.makeText(
-                context,
-                "The results displayed may not be accurate as your phone enables Wi-Fi scanning throttling",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-        adapter.submitList(scanResults)
-        binding.swipeRefresh.isRefreshing = false
+    private fun updateWifiStatusText(state: Int) {
+        val status = WifiUtil.getWifiStateDescription(state)
+        binding.wifiStatus.text = "Wi-Fi Status: $status"
     }
 
+    private fun updateConnectedWifiText() {
+        val wifiInfo = WifiUtil.getCurrentlyConnectedWifiInfo(wifiManager)
+        val ssid = if (wifiInfo.ssid != "<unknown ssid>") wifiInfo.ssid else "-"
+        binding.connectedWifi.text =
+            "Connected Wi-Fi: $ssid"
+    }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (PermissionUtil.allPermissionsGranted(requireContext(), REQUIRED_PERMISSIONS)) {
-                doWifiScan()
-            } else {
-                binding.swipeRefresh.isRefreshing = false
-                binding.isPermissionDenied = true
-            }
+    class MyConnectivityManager(
+        val context: Context
+    ) :
+        ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            super.onAvailable(network)
+            sendBroadcast()
+        }
+
+        override fun onLost(network: Network) {
+            super.onLost(network)
+            sendBroadcast()
+        }
+
+        private fun sendBroadcast() {
+            context.sendBroadcast(
+                Intent().apply {
+                    action = WifiStateBroadcastListener.WIFI_STATE_CONNECTION_CHANGES_ACTION
+                }
+            )
         }
     }
 
     companion object {
         private const val TAG = "WifiFragment"
-        private const val REQUEST_CODE_PERMISSIONS = 10
-        private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }
