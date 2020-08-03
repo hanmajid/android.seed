@@ -8,11 +8,19 @@ A social media prototype that demonstrates the usage of Android Jetpack librarie
 
 ## Features
 
-| Name             |             Screenshot              |
-| ---------------- | :---------------------------------: |
-| Onboarding page | <img src="./screenshots/onboarding_page.gif" height="300" /> |
-| Login page | <img src="./screenshots/login_page.gif" height="300" /> |
-| Check Wi-Fi status, connected Wi-Fi information, & P2P support.  | <img src="./screenshots/wifi_state.gif" height="300" /> |
+### Pages
+
+|     |     |     |
+| :-: | :-: | :-: |
+| Onboarding | Login | Register |
+| <img src="./screenshots/onboarding_page.gif" height="300" /> | <img src="./screenshots/login_page.gif" height="300" /> | `TODO` |
+
+### Connectivity > Wi-Fi
+
+|     |     |     |
+| :-: | :-: | :-: |
+| Check Wi-Fi status, connected Wi-Fi information, & P2P support.  | Wi-Fi scanning | Wi-Fi Direct (P2P) |
+| <img src="./screenshots/wifi_state.gif" height="300" /> | `TODO` | `TODO` |
   
 * Register page
 * Profile page
