@@ -2,18 +2,22 @@ package com.hanmajid.android.seed.ui.connectivity.wifi
 
 import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.net.ConnectivityManager
-import android.net.Network
 import android.net.NetworkRequest
+import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.location.LocationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.hanmajid.android.seed.databinding.FragmentWifiBinding
+import com.hanmajid.android.seed.util.PermissionUtil
 
 class WifiFragment : Fragment() {
 
@@ -24,6 +28,9 @@ class WifiFragment : Fragment() {
     }
     private val connectivityManager: ConnectivityManager by lazy(LazyThreadSafetyMode.NONE) {
         requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+    private val locationManager: LocationManager by lazy(LazyThreadSafetyMode.NONE) {
+        requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
     override fun onCreateView(
@@ -42,15 +49,15 @@ class WifiFragment : Fragment() {
         val networkResult = NetworkRequest.Builder().build()
         connectivityManager.registerNetworkCallback(
             networkResult,
-            MyConnectivityManager(requireContext())
+            WifiStateConnectivityNetworkCallback(requireContext())
         )
 
         // Listen to Wi-Fi state changes here.
         WifiStateBroadcastListener(
             viewLifecycleOwner,
             requireContext(),
-            { prevState, state ->
-                updateWifiStatusText(state)
+            { _, state ->
+                updateWifiStatus(state)
             }, {
                 updateConnectedWifiText()
             }
@@ -59,11 +66,7 @@ class WifiFragment : Fragment() {
 
     private fun setupBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
-        updateWifiStatusText(wifiManager.wifiState)
-        updateConnectedWifiText()
-
-        binding.wifiP2pStatus.text =
-            if (wifiManager.isP2pSupported) "P2P: Supported" else "P2P: Not supported"
+        refreshUI()
 
         binding.buttonWifiScan.setOnClickListener {
             findNavController().navigate(
@@ -77,57 +80,98 @@ class WifiFragment : Fragment() {
             )
         }
 
+        val intentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                refreshUI()
+            }
         binding.buttonWifiSettings.setOnClickListener {
-            startActivity(
+            intentLauncher.launch(
                 Intent(
                     Settings.ACTION_WIFI_SETTINGS
                 )
             )
         }
+        binding.buttonLocationSettings.setOnClickListener {
+            intentLauncher.launch(
+                Intent(
+                    Settings.ACTION_LOCATION_SOURCE_SETTINGS
+                )
+            )
+        }
+        binding.buttonPermissionSettings.setOnClickListener {
+            intentLauncher.launch(
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", requireActivity().packageName, null)
+                }
+            )
+        }
 
         binding.swipeRefresh.setOnRefreshListener {
-            updateWifiStatusText(wifiManager.wifiState)
-            updateConnectedWifiText()
+            refreshUI()
             binding.swipeRefresh.isRefreshing = false
         }
     }
 
-    private fun updateWifiStatusText(state: Int) {
-        val status = WifiUtil.getWifiStateDescription(state)
-        binding.wifiStatus.text = "Wi-Fi Status: $status"
+    private fun refreshUI() {
+        updateWifiStatus(wifiManager.wifiState)
+        updateConnectedWifiText()
+    }
+
+    private fun updateWifiStatus(state: Int = wifiManager.wifiState) {
+        binding.isWifiEnabled =
+            state == WifiManager.WIFI_STATE_ENABLING || state == WifiManager.WIFI_STATE_ENABLED
+        binding.wifiState = WifiUtil.getWifiStateDescription(state)
     }
 
     private fun updateConnectedWifiText() {
-        val wifiInfo = WifiUtil.getCurrentlyConnectedWifiInfo(wifiManager)
-        val ssid = if (wifiInfo.ssid != "<unknown ssid>") wifiInfo.ssid else "-"
-        binding.connectedWifi.text =
-            "Connected Wi-Fi: $ssid"
+        binding.isPermissionGranted = true
+        if (PermissionUtil.allPermissionsGranted(
+                requireContext(),
+                REQUIRED_PERMISSIONS
+            )
+        ) {
+            refreshConnectedWifiInfo()
+        } else {
+            PermissionUtil.requestAllPermissions(
+                this,
+                binding.root,
+                REQUIRED_PERMISSIONS,
+                REQUEST_CODE_PERMISSIONS
+            )
+        }
+
+        binding.isP2pSupported = wifiManager.isP2pSupported
     }
 
-    class MyConnectivityManager(
-        val context: Context
-    ) :
-        ConnectivityManager.NetworkCallback() {
-        override fun onAvailable(network: Network) {
-            super.onAvailable(network)
-            sendBroadcast()
-        }
+    private fun refreshConnectedWifiInfo() {
+        val isLocationEnabled = LocationManagerCompat.isLocationEnabled(locationManager)
+        binding.isLocationEnabled = isLocationEnabled
 
-        override fun onLost(network: Network) {
-            super.onLost(network)
-            sendBroadcast()
-        }
+        val wifiInfo = WifiUtil.getCurrentlyConnectedWifiInfo(wifiManager)
+        binding.connectedWifi = if (wifiInfo.ssid != "<unknown ssid>") wifiInfo.ssid else "-"
+    }
 
-        private fun sendBroadcast() {
-            context.sendBroadcast(
-                Intent().apply {
-                    action = WifiStateBroadcastListener.WIFI_STATE_CONNECTION_CHANGES_ACTION
-                }
-            )
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (PermissionUtil.allPermissionsGranted(
+                    requireContext(),
+                    REQUIRED_PERMISSIONS
+                )
+            ) {
+                refreshConnectedWifiInfo()
+            } else {
+                binding.isPermissionGranted = false
+            }
         }
     }
 
     companion object {
         private const val TAG = "WifiFragment"
+        private const val REQUEST_CODE_PERMISSIONS = 10
+        private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }

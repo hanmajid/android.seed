@@ -3,8 +3,11 @@ package com.hanmajid.android.seed.ui.connectivity.wifi
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pDevice
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import com.hanmajid.android.seed.R
 import com.hanmajid.android.seed.ui.connectivity.wifi.WifiConstants.WIFI_SIGNAL_LEVEL_VERY_GOOD
 import kotlin.math.floor
 
@@ -37,4 +40,15 @@ fun setWifiFrequency(textView: TextView?, scanResult: ScanResult?) {
             text = "$freq GHz"
         }
     }
+}
+
+@BindingAdapter("wifiStateIcon")
+fun setWifiStateIcon(imageView: ImageView?, isWifiEnabled: Boolean?) {
+    imageView?.setImageDrawable(
+        ContextCompat.getDrawable(
+            imageView.context,
+            if (isWifiEnabled == true) R.drawable.ic_baseline_wifi_24 else
+                R.drawable.ic_baseline_wifi_off_24
+        )
+    )
 }

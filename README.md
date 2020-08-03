@@ -8,13 +8,11 @@ A social media prototype that demonstrates the usage of Android Jetpack librarie
 
 ## Features
 
-* Onboarding page for first-time user
-
-  ![Onboarding page screenshot](screenshots/onboarding_page.gif?raw=true)
-
-* Login page
-
-  ![Login page screenshot](screenshots/login_page.gif?raw=true)
+| Name             |             Screenshot              |
+| ---------------- | :---------------------------------: |
+| Onboarding page | <img src="./screenshots/onboarding_page.gif" height="300" /> |
+| Login page | <img src="./screenshots/login_page.gif" height="300" /> |
+| Check Wi-Fi status, connected Wi-Fi information, & P2P support.  | <img src="./screenshots/wifi_state.gif" height="300" /> |
   
 * Register page
 * Profile page
