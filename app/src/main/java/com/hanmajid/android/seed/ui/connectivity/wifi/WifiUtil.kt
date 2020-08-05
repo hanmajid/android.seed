@@ -3,6 +3,7 @@ package com.hanmajid.android.seed.ui.connectivity.wifi
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
+import android.net.wifi.p2p.WifiP2pManager
 import com.hanmajid.android.seed.ui.connectivity.wifi.WifiConstants.WIFI_P2P_DEVICE_STATUS_AVAILABLE
 import com.hanmajid.android.seed.ui.connectivity.wifi.WifiConstants.WIFI_P2P_DEVICE_STATUS_CONNECTED
 import com.hanmajid.android.seed.ui.connectivity.wifi.WifiConstants.WIFI_P2P_DEVICE_STATUS_FAILED
@@ -81,6 +82,15 @@ class WifiUtil {
             WifiManager.WIFI_STATE_ENABLED -> "Enabled"
             WifiManager.WIFI_STATE_ENABLING -> "Enabling"
             WifiManager.WIFI_STATE_UNKNOWN -> "Unknown"
+            else -> ""
+        }
+
+        @JvmStatic
+        fun getWifiP2PFailureReason(reason: Int) = when (reason) {
+            WifiP2pManager.ERROR -> "Error"
+            WifiP2pManager.P2P_UNSUPPORTED -> "P2P unsupported"
+            WifiP2pManager.BUSY -> "Busy"
+            WifiP2pManager.NO_SERVICE_REQUESTS -> "No service requests"
             else -> ""
         }
 

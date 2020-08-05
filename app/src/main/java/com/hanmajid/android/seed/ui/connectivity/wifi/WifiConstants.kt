@@ -13,5 +13,4 @@ object WifiConstants {
     const val WIFI_P2P_DEVICE_STATUS_FAILED = 2
     const val WIFI_P2P_DEVICE_STATUS_AVAILABLE = 3
     const val WIFI_P2P_DEVICE_STATUS_UNAVAILABLE = 4
-
 }

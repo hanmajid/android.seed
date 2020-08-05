@@ -4,6 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.connectivity.wifi.p2p.WifiP2pFragment">
 
+    <data>
+
+        <variable
+            name="isLoading"
+            type="Boolean" />
+
+        <variable
+            name="isPermissionGranted"
+            type="Boolean" />
+
+        <variable
+            name="isLocationEnabled"
+            type="Boolean" />
+
+        <variable
+            name="isWifiEnabled"
+            type="Boolean" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -11,7 +31,8 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:refreshing="@{isLoading}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -19,10 +40,52 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
+                    dividerItemDecorationVertical="@{true}"
+                    hidden="@{!isPermissionGranted || !isWifiEnabled || !isLocationEnabled}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_wifi_p2p_device" />
+
+                <LinearLayout
+                    hidden="@{isLoading || (isPermissionGranted &amp;&amp; isWifiEnabled &amp;&amp; isLocationEnabled)}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="You should grant location permission and enable location and Wi-Fi services."
+                        android:textAlignment="center" />
+
+                    <Button
+                        android:id="@+id/button_wifi_settings"
+                        hidden="@{isWifiEnabled}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Enable Wi-Fi" />
+
+                    <Button
+                        android:id="@+id/button_permission_settings"
+                        hidden="@{isPermissionGranted}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Allow Location" />
+
+                    <Button
+                        android:id="@+id/button_location_settings"
+                        hidden="@{isLocationEnabled}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Enable Location" />
+
+                </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
