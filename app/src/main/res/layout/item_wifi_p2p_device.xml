@@ -8,7 +8,7 @@
         <import type="com.hanmajid.android.seed.ui.connectivity.wifi.WifiConstants" />
 
         <variable
-            name="isDisconnecting"
+            name="isGroupOwner"
             type="Boolean" />
 
         <variable
@@ -53,16 +53,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_end="16dp" />
-
-            <com.google.android.material.progressindicator.ProgressIndicator
-                style="@style/Widget.MaterialComponents.ProgressIndicator.Circular.Indeterminate"
-                hidden="@{!isDisconnecting}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -117,7 +107,7 @@
                     <Button
                         android:id="@+id/button_send"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
-                        hidden="@{device.status != WifiConstants.WIFI_P2P_DEVICE_STATUS_CONNECTED}"
+                        hidden="@{device.status != WifiConstants.WIFI_P2P_DEVICE_STATUS_CONNECTED || isGroupOwner}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Send File" />
@@ -125,7 +115,7 @@
                     <Button
                         android:id="@+id/button_receive"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
-                        hidden="@{device.status != WifiConstants.WIFI_P2P_DEVICE_STATUS_CONNECTED}"
+                        hidden="@{device.status != WifiConstants.WIFI_P2P_DEVICE_STATUS_CONNECTED || !isGroupOwner}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Receive File" />

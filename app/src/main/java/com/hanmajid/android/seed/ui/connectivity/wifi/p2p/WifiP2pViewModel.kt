@@ -43,7 +43,7 @@ class WifiP2pViewModel @ViewModelInject constructor(
                 }
                 outputStream.close()
                 inputStream?.close()
-                onComplete("Success!")
+                onComplete("File sent!")
             } catch (e: IOException) {
                 Log.wtf(TAG, e.message)
                 onComplete(e.message)
@@ -62,21 +62,25 @@ class WifiP2pViewModel @ViewModelInject constructor(
         }
     }
 
-    fun startServer(isGroupOwner: Boolean, onComplete: (error: String?) -> Unit) {
+    private var serverSocket: ServerSocket? = null
+
+    fun startServer(onComplete: (file: File?, error: String?) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
-            val port = if (isGroupOwner) GROUP_OWNER_PORT else NON_GROUP_OWNER_PORT
+            val port = GROUP_OWNER_PORT
             Log.wtf(TAG, "Starting server... $port")
             /**
              * Create a server socket.
              */
             try {
-                val serverSocket = ServerSocket(port)
+                serverSocket = ServerSocket()
+                serverSocket?.reuseAddress = true
+                serverSocket?.bind(InetSocketAddress(port))
                 serverSocket.use {
                     /**
                      * Wait for client connections. This call blocks until a connection
                      * is accepted from a client.
                      */
-                    val client = serverSocket.accept()
+                    val client = serverSocket!!.accept()
 
                     /**
                      * If this code is reached, a client has connected and transferred data
@@ -84,7 +88,7 @@ class WifiP2pViewModel @ViewModelInject constructor(
                      */
                     val filename = "${System.currentTimeMillis()}.jpg"
                     val f = File(
-                        context.getExternalFilesDir(null), filename
+                        context.getExternalFilesDir("received"), filename
                     )
                     f.createNewFile()
                     val inputStream = client.getInputStream()
@@ -102,18 +106,22 @@ class WifiP2pViewModel @ViewModelInject constructor(
                     } catch (e: IOException) {
 
                     }
-                    serverSocket.close()
+                    serverSocket!!.close()
                     Log.wtf(TAG, "File received: $filename")
-                    onComplete("File received: $filename")
+                    onComplete(f, "File received: $filename")
                 }
             } catch (e: IOException) {
-                onComplete(e.message)
+                onComplete(null, e.message)
                 Log.wtf(TAG, e.message)
             } catch (e: Exception) {
-                onComplete(e.message)
+                onComplete(null, e.message)
                 Log.wtf(TAG, e.message)
             }
         }
+    }
+
+    fun closeServer() {
+        serverSocket?.close()
     }
 
     companion object {

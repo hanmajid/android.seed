@@ -1,27 +1,30 @@
 package com.hanmajid.android.seed.ui.connectivity.wifi.p2p
 
-import android.content.Context
-import android.net.wifi.p2p.WifiP2pConfig
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hanmajid.android.seed.databinding.ItemWifiP2pDeviceBinding
 import com.hanmajid.android.seed.ui.connectivity.wifi.WifiConstants
 
 class WifiP2PDeviceListAdapter(
-    private val context: Context,
     private val manager: WifiP2pManager?,
     private val channel: WifiP2pManager.Channel?,
     private val onClickSend: () -> Unit,
-    private val onClickReceive: () -> Unit
+    private val onClickReceive: () -> Unit,
+    private val onClickConnect: (WifiP2pManager?, WifiP2pManager.Channel?, WifiP2pDevice) -> Unit,
+    private val onClickDisconnect: (WifiP2pManager?, WifiP2pManager.Channel?, WifiP2pDevice) -> Unit
 ) :
     ListAdapter<WifiP2pDevice, RecyclerView.ViewHolder>(WIFI_COMPARATOR) {
+
+    var isGroupOwner: Boolean = false
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     companion object {
         private val WIFI_COMPARATOR = object : DiffUtil.ItemCallback<WifiP2pDevice>() {
@@ -41,12 +44,14 @@ class WifiP2PDeviceListAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as WifiP2PDeviceViewHolder).bind(
-            context,
+            isGroupOwner,
             getItem(position),
             manager,
             channel,
             onClickSend,
-            onClickReceive
+            onClickReceive,
+            onClickConnect,
+            onClickDisconnect
         )
     }
 
@@ -59,74 +64,23 @@ class WifiP2PDeviceListAdapter(
     class WifiP2PDeviceViewHolder(val binding: ItemWifiP2pDeviceBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private fun connectToDevice(
-            manager: WifiP2pManager?,
-            channel: WifiP2pManager.Channel?,
-            device: WifiP2pDevice
-        ) {
-            val config = WifiP2pConfig()
-            config.deviceAddress = device.deviceAddress
-            channel?.also { channel ->
-                manager?.connect(
-                    channel,
-                    config,
-                    object : WifiP2pManager.ActionListener {
-                        override fun onSuccess() {
-                            Log.wtf(TAG, "Success")
-                        }
-
-                        override fun onFailure(reason: Int) {
-                            Log.wtf(TAG, "Failed")
-                        }
-
-                    }
-                )
-            }
-        }
-
-        private fun disconnectToDevice(
-            manager: WifiP2pManager?,
-            channel: WifiP2pManager.Channel?,
-            device: WifiP2pDevice
-        ) {
-            binding.isDisconnecting = true
-            val config = WifiP2pConfig()
-            config.deviceAddress = device.deviceAddress
-            manager?.removeGroup(channel, object : WifiP2pManager.ActionListener {
-                override fun onSuccess() {
-                    binding.isDisconnecting = false
-                }
-
-                override fun onFailure(reason: Int) {
-                    binding.isDisconnecting = false
-                }
-            })
-        }
-
         fun bind(
-            context: Context,
+            isGroupOwner: Boolean,
             device: WifiP2pDevice?,
             manager: WifiP2pManager?,
             channel: WifiP2pManager.Channel?,
             onClickSend: () -> Unit,
-            onClickReceive: () -> Unit
+            onClickReceive: () -> Unit,
+            onClickConnect: (WifiP2pManager?, WifiP2pManager.Channel?, WifiP2pDevice) -> Unit,
+            onClickDisconnect: (WifiP2pManager?, WifiP2pManager.Channel?, WifiP2pDevice) -> Unit
         ) {
             device?.apply {
+                binding.isGroupOwner = isGroupOwner
                 binding.device = this
                 binding.cardView.setOnClickListener {
                     when (this.status) {
                         WifiConstants.WIFI_P2P_DEVICE_STATUS_AVAILABLE -> {
-                            MaterialAlertDialogBuilder(context)
-                                .setTitle(
-                                    "Connect to ${this.deviceName}?"
-                                )
-                                .setNegativeButton("Cancel") { _, _ ->
-
-                                }
-                                .setPositiveButton("Connect") { _, _ ->
-                                    connectToDevice(manager, channel, this)
-                                }
-                                .show()
+                            onClickConnect(manager, channel, this)
                         }
                     }
                 }
@@ -137,17 +91,7 @@ class WifiP2PDeviceListAdapter(
                     onClickReceive()
                 }
                 binding.buttonDisconnect.setOnClickListener {
-                    MaterialAlertDialogBuilder(context)
-                        .setTitle(
-                            "Disconnect from ${this.deviceName}?"
-                        )
-                        .setNegativeButton("Cancel") { _, _ ->
-
-                        }
-                        .setPositiveButton("Disconnect") { _, _ ->
-                            disconnectToDevice(manager, channel, this)
-                        }
-                        .show()
+                    onClickDisconnect(manager, channel, this)
                 }
             }
         }

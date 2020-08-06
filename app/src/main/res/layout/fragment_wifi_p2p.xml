@@ -43,27 +43,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/text_group_owner"
-                        style="@style/TextAppearance.MaterialComponents.Body1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Group Owner: Yes" />
-
-                    <TextView
-                        android:id="@+id/text_my_ip"
-                        style="@style/TextAppearance.MaterialComponents.Body1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="My IP: -" />
-
-                    <TextView
-                        android:id="@+id/text_other_ip"
-                        style="@style/TextAppearance.MaterialComponents.Body1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Other IP: -" />
-
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view"
                         dividerItemDecorationVertical="@{true}"

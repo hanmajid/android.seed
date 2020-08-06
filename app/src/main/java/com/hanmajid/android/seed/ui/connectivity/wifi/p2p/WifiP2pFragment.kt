@@ -5,6 +5,7 @@ import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
 import android.net.wifi.WifiManager
+import android.net.wifi.p2p.WifiP2pConfig
 import android.net.wifi.p2p.WifiP2pManager
 import android.os.Bundle
 import android.os.Looper
@@ -14,6 +15,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.FileProvider
 import androidx.core.location.LocationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -49,7 +52,7 @@ class WifiP2pFragment : Fragment() {
     private var wifiP2pChannel: WifiP2pManager.Channel? = null
     private var isWifiP2pEnabled: Boolean = false
     private var host: String? = ""
-    private var isGroupOwner: Boolean = false
+    private var receiveFileDialog: AlertDialog? = null
 
     private lateinit var adapter: WifiP2PDeviceListAdapter
 
@@ -63,17 +66,6 @@ class WifiP2pFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Listen to Wi-Fi state changes here.
-//        WifiStateBroadcastListener(
-//            viewLifecycleOwner,
-//            requireContext(),
-//            { _, _ ->
-//                doRefresh()
-//            }, {
-//
-//            }
-//        )
 
         wifiP2pChannel = wifiP2pManager.initialize(requireContext(), Looper.getMainLooper(), null)
         wifiP2pChannel?.also { channel ->
@@ -92,25 +84,11 @@ class WifiP2pFragment : Fragment() {
                     adapter.submitList(it.deviceList.toList())
                     binding.isLoading = false
                 },
-                { info, group ->
-                    group?.clientList?.forEach {
-                        Log.wtf("CLIENT", it.toString())
-                    }
+                { info, _ ->
                     info?.let { info ->
                         if (info.groupFormed) {
                             host = info.groupOwnerAddress.hostAddress
-                            isGroupOwner = info.isGroupOwner
-                            binding.textGroupOwner.text =
-                                if (isGroupOwner) "Group Owner: Yes" else "Group Owner: No"
-                            binding.textMyIp.text = getDottedDecimalIP(getLocalIPAddress()!!)!!
-                            if (isGroupOwner) {
-                                Snackbar.make(
-                                    binding.root,
-                                    "Group Owner!!!",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
-                            }
-//                            viewModel.startServer()
+                            adapter.isGroupOwner = info.isGroupOwner
                         }
                     }
                 }
@@ -124,7 +102,6 @@ class WifiP2pFragment : Fragment() {
     private fun setupBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
         adapter = WifiP2PDeviceListAdapter(
-            requireContext(),
             wifiP2pManager,
             wifiP2pChannel,
             {
@@ -135,11 +112,11 @@ class WifiP2pFragment : Fragment() {
                         val uri = it.data?.data
                         host?.apply {
                             uri?.let {
-                                val clientHost =
-                                    if (isGroupOwner) getDottedDecimalIP(getLocalIPAddress()!!)!! else this
-                                val clientPort =
-                                    if (isGroupOwner) WifiP2pViewModel.NON_GROUP_OWNER_PORT else WifiP2pViewModel.GROUP_OWNER_PORT
-                                viewModel.sendFile(clientHost, clientPort, it) { message ->
+                                viewModel.sendFile(
+                                    this,
+                                    WifiP2pViewModel.GROUP_OWNER_PORT,
+                                    it
+                                ) { message ->
                                     message?.let {
                                         Snackbar.make(
                                             binding.root,
@@ -158,20 +135,77 @@ class WifiP2pFragment : Fragment() {
                 )
             },
             {
-                viewModel.startServer(isGroupOwner) { message ->
+                viewModel.startServer { file, message ->
                     message?.let {
+                        receiveFileDialog?.dismiss()
                         Snackbar.make(
                             binding.root,
                             it,
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                            Snackbar.LENGTH_INDEFINITE
+                        )
+                            .setAction("See File") {
+                                val fileUri = FileProvider.getUriForFile(
+                                    requireContext(),
+                                    "com.hanmajid.android.seed.fileprovider",
+                                    file!!
+                                )
+                                val intent = Intent()
+                                intent.action = Intent.ACTION_VIEW
+                                intent.setDataAndType(fileUri, "image/*")
+                                intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                requireContext().startActivity(intent)
+                            }
+                            .show()
                     }
                 }
-                val dialog = MaterialAlertDialogBuilder(requireContext())
+                receiveFileDialog = MaterialAlertDialogBuilder(requireContext())
+                    .setMessage("Waiting for file...")
+                    .setNegativeButton("Cancel") { _, _ ->
+                        viewModel.closeServer()
+                    }
+                    .show()
+            }, { manager, channel, device ->
+                MaterialAlertDialogBuilder(requireContext())
                     .setTitle(
-                        if (isGroupOwner) "Group Owner" else "Not Group Owner"
+                        "Connect to ${device.deviceName}?"
                     )
-                    .setMessage("Waiting for files...")
+                    .setNegativeButton("Cancel") { _, _ ->
+
+                    }
+                    .setPositiveButton("Connect") { _, _ ->
+                        val config = WifiP2pConfig()
+                        config.deviceAddress = device.deviceAddress
+                        channel?.also { channel ->
+                            manager?.connect(
+                                channel,
+                                config,
+                                object : WifiP2pManager.ActionListener {
+                                    override fun onSuccess() {
+                                        Log.wtf(TAG, "Success")
+                                    }
+
+                                    override fun onFailure(reason: Int) {
+                                        Log.wtf(TAG, "Failed")
+                                    }
+
+                                }
+                            )
+                        }
+                    }
+                    .show()
+            },
+            { manager, channel, device ->
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(
+                        "Disconnect from ${device.deviceName}?"
+                    )
+                    .setNegativeButton("Cancel") { _, _ -> }
+                    .setPositiveButton("Disconnect") { _, _ ->
+                        manager?.removeGroup(channel, object : WifiP2pManager.ActionListener {
+                            override fun onSuccess() {}
+                            override fun onFailure(reason: Int) {}
+                        })
+                    }
                     .show()
             })
         binding.recyclerView.adapter = adapter
