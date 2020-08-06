@@ -100,6 +100,9 @@ class WifiP2pFragment : Fragment() {
                         if (info.groupFormed) {
                             host = info.groupOwnerAddress.hostAddress
                             isGroupOwner = info.isGroupOwner
+                            binding.textGroupOwner.text =
+                                if (isGroupOwner) "Group Owner: Yes" else "Group Owner: No"
+                            binding.textMyIp.text = getDottedDecimalIP(getLocalIPAddress()!!)!!
                             if (isGroupOwner) {
                                 Snackbar.make(
                                     binding.root,

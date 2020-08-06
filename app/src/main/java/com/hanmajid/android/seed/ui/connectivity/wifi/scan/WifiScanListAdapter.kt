@@ -1,6 +1,8 @@
 package com.hanmajid.android.seed.ui.connectivity.wifi.scan
 
 import android.net.wifi.ScanResult
+import android.net.wifi.WifiInfo
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,7 +10,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.hanmajid.android.seed.databinding.ItemWifiBinding
 
-class WifiListAdapter : ListAdapter<ScanResult, RecyclerView.ViewHolder>(WIFI_COMPARATOR) {
+class WifiScanListAdapter : ListAdapter<ScanResult, RecyclerView.ViewHolder>(WIFI_COMPARATOR) {
+
+    var connectedWifiInfo: WifiInfo? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     companion object {
         private val WIFI_COMPARATOR = object : DiffUtil.ItemCallback<ScanResult>() {
@@ -24,7 +32,7 @@ class WifiListAdapter : ListAdapter<ScanResult, RecyclerView.ViewHolder>(WIFI_CO
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as WifiViewHolder).bind(getItem(position))
+        (holder as WifiViewHolder).bind(getItem(position), connectedWifiInfo)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -35,8 +43,11 @@ class WifiListAdapter : ListAdapter<ScanResult, RecyclerView.ViewHolder>(WIFI_CO
 
     class WifiViewHolder(val binding: ItemWifiBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(scanResult: ScanResult?) {
+        fun bind(scanResult: ScanResult?, connectedWifiInfo: WifiInfo?) {
             scanResult?.apply {
+                Log.wtf("CONNECTED", connectedWifiInfo.toString())
+                Log.wtf("ITEM", this.toString())
+                binding.isConnected = connectedWifiInfo?.bssid == this.BSSID
                 binding.scanResult = this
             }
         }

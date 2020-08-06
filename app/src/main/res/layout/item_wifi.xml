@@ -5,6 +5,12 @@
 
     <data>
 
+        <import type="androidx.core.content.ContextCompat" />
+
+        <variable
+            name="isConnected"
+            type="Boolean" />
+
         <variable
             name="scanResult"
             type="android.net.wifi.ScanResult" />
@@ -12,6 +18,8 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        backgroundIf="@{isConnected}"
+        backgroundIfColor="@{@color/colorSuccessLight}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -94,9 +102,17 @@
                 <TextView
                     style="@style/TextAppearance.MaterialComponents.Body2"
                     wifiFrequency="@{scanResult}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    tools:text="2.4 GHz" />
+
+                <TextView
+                    style="@style/TextAppearance.MaterialComponents.Caption"
+                    hidden="@{!isConnected}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="2.4 GHz" />
+                    android:text="Connected" />
 
             </LinearLayout>
 

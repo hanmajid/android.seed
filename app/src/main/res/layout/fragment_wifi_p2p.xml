@@ -38,14 +38,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    dividerItemDecorationVertical="@{true}"
-                    hidden="@{!isPermissionGranted || !isWifiEnabled || !isLocationEnabled}"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_wifi_p2p_device" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text_group_owner"
+                        style="@style/TextAppearance.MaterialComponents.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Group Owner: Yes" />
+
+                    <TextView
+                        android:id="@+id/text_my_ip"
+                        style="@style/TextAppearance.MaterialComponents.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="My IP: -" />
+
+                    <TextView
+                        android:id="@+id/text_other_ip"
+                        style="@style/TextAppearance.MaterialComponents.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Other IP: -" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view"
+                        dividerItemDecorationVertical="@{true}"
+                        hidden="@{!isPermissionGranted || !isWifiEnabled || !isLocationEnabled}"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_wifi_p2p_device" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     hidden="@{isLoading || (isPermissionGranted &amp;&amp; isWifiEnabled &amp;&amp; isLocationEnabled)}"
@@ -54,7 +84,8 @@
                     android:layout_margin="16dp"
                     android:gravity="center"
                     android:orientation="vertical"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="gone">
 
                     <TextView
                         style="@style/TextAppearance.MaterialComponents.Caption"

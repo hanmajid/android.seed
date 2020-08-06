@@ -3,6 +3,7 @@ package com.hanmajid.android.seed.databinding
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.navigation.NavController
@@ -10,6 +11,16 @@ import androidx.navigation.NavDirections
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.hanmajid.android.seed.di.GlideApp
+
+@BindingAdapter(value = ["backgroundIf", "backgroundIfColor"])
+fun setBackgroundIf(view: View?, condition: Boolean?, backgroundIfColor: Int) {
+    view?.apply {
+        setBackgroundColor(
+            if (condition == true) backgroundIfColor
+            else ContextCompat.getColor(context, android.R.color.transparent)
+        )
+    }
+}
 
 @BindingAdapter("hidden")
 fun setHidden(view: View?, hide: Boolean?) {

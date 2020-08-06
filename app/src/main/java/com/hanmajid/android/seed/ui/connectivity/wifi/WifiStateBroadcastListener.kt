@@ -54,6 +54,6 @@ class WifiStateBroadcastListener(
     }
 
     companion object {
-        const val WIFI_STATE_CONNECTION_CHANGES_ACTION = "WIFI_STATE_CONNECTION_CHANGES_ACTION"
+        const val WIFI_STATE_CONNECTION_CHANGES_ACTION = "com.hanmajid.android.seed.WIFI_STATE_CONNECTION_CHANGES_ACTION"
     }
 }

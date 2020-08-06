@@ -16,7 +16,7 @@
 
         <variable
             name="adapter"
-            type="com.hanmajid.android.seed.ui.connectivity.wifi.scan.WifiListAdapter" />
+            type="com.hanmajid.android.seed.ui.connectivity.wifi.scan.WifiScanListAdapter" />
 
     </data>
 
@@ -34,44 +34,35 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
-                    hidden="@{!isLocationDisabled}"
+                    hidden="@{!isLocationDisabled &amp;&amp; !isPermissionDenied}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:visibility="gone">
 
                     <TextView
+                        style="@style/TextAppearance.MaterialComponents.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You should enable location " />
-
-                    <Button
-                        android:id="@+id/button_location_settings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Open Location Settings" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    hidden="@{!isPermissionDenied}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="You should grant location permission" />
+                        android:layout_marginBottom="16dp"
+                        android:text="You should grant location permission and enable location service." />
 
                     <Button
                         android:id="@+id/button_app_settings"
+                        hidden="@{!isPermissionDenied}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Open App Settings" />
+                        android:text="Allow Location" />
+
+                    <Button
+                        android:id="@+id/button_location_settings"
+                        hidden="@{!isLocationDisabled}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Enable Location" />
 
                 </LinearLayout>
 
@@ -82,6 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="2"
                     tools:listitem="@layout/item_wifi" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

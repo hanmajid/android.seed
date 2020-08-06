@@ -3,6 +3,8 @@ package com.hanmajid.android.seed.ui.connectivity.wifi.scan
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkRequest
 import android.net.Uri
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
@@ -11,10 +13,13 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.location.LocationManagerCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import com.hanmajid.android.seed.databinding.FragmentWifiScanBinding
+import com.hanmajid.android.seed.ui.connectivity.wifi.WifiStateBroadcastListener
+import com.hanmajid.android.seed.ui.connectivity.wifi.WifiStateConnectivityNetworkCallback
 import com.hanmajid.android.seed.ui.connectivity.wifi.WifiUtil
 import com.hanmajid.android.seed.util.PermissionUtil
 
@@ -26,11 +31,15 @@ class WifiScanFragment : Fragment() {
         requireContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
     }
 
+    private val connectivityManager: ConnectivityManager by lazy(LazyThreadSafetyMode.NONE) {
+        requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+
     private val locationManager: LocationManager by lazy(LazyThreadSafetyMode.NONE) {
         requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
-    private val adapter = WifiListAdapter()
+    private val adapter = WifiScanListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +53,7 @@ class WifiScanFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupBinding()
 
-        // Step 2. Instantiate [WifiScanBroadcastReceiver]
+        // Listen to Wi-Fi scan results.
         WifiScanBroadcastReceiver(
             viewLifecycleOwner,
             requireContext(),
@@ -57,7 +66,33 @@ class WifiScanFragment : Fragment() {
             }
         )
 
+        // Listen to connected Wi-Fi changes to get connected Wi-Fi information.
+        val networkResult = NetworkRequest.Builder().build()
+        connectivityManager.registerNetworkCallback(
+            networkResult,
+            WifiStateConnectivityNetworkCallback(requireContext())
+        )
+        WifiStateBroadcastListener(
+            viewLifecycleOwner,
+            requireContext(),
+            { _, _ ->
+                // Do nothing
+            }, {
+                refreshConnectedWifiInfo()
+            }
+        )
+
+        refreshUI()
+    }
+
+    private fun refreshUI() {
         refreshScan()
+        refreshConnectedWifiInfo()
+    }
+
+    private fun refreshConnectedWifiInfo() {
+        val wifiInfo = WifiUtil.getCurrentlyConnectedWifiInfo(wifiManager)
+        adapter.connectedWifiInfo = wifiInfo.takeIf { it.ssid != "<unknown ssid>" }
     }
 
     private fun setupBinding() {
@@ -65,8 +100,12 @@ class WifiScanFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.swipeRefresh.isRefreshing = true
 
+        val intentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                refreshUI()
+            }
         binding.buttonLocationSettings.setOnClickListener {
-            startActivity(
+            intentLauncher.launch(
                 Intent(
                     Settings.ACTION_LOCATION_SOURCE_SETTINGS
                 )
@@ -74,7 +113,7 @@ class WifiScanFragment : Fragment() {
         }
 
         binding.buttonAppSettings.setOnClickListener {
-            startActivity(
+            intentLauncher.launch(
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                     data = Uri.fromParts("package", requireActivity().packageName, null)
                 }
@@ -82,7 +121,7 @@ class WifiScanFragment : Fragment() {
         }
 
         binding.swipeRefresh.setOnRefreshListener {
-            refreshScan()
+            refreshUI()
         }
     }
 
@@ -104,7 +143,6 @@ class WifiScanFragment : Fragment() {
         }
     }
 
-    // Called when first instantiating
     private fun doWifiScan() {
         val isLocationEnabled = LocationManagerCompat.isLocationEnabled(locationManager)
         binding.isLocationDisabled = !isLocationEnabled
@@ -122,16 +160,19 @@ class WifiScanFragment : Fragment() {
 
     private fun updateList(scanResults: List<ScanResult>, success: Boolean) {
         if (!success) {
-            Toast.makeText(
-                context,
-                "The results displayed may not be accurate as your phone enables Wi-Fi scanning throttling",
-                Toast.LENGTH_SHORT
-            ).show()
+            Snackbar.make(
+                binding.root,
+                "Try disabling Wi-Fi scanning throttling in developer options to scan Wi-Fi frequently.",
+                Snackbar.LENGTH_SHORT
+            )
+                .setAction("OK") {
+
+                }
+                .show()
         }
         adapter.submitList(scanResults)
         binding.swipeRefresh.isRefreshing = false
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
