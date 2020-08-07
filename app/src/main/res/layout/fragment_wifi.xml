@@ -198,14 +198,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Wifi Scan"
+                    android:text="Wi-Fi Scan"
                     app:icon="@drawable/ic_baseline_wifi_24" />
 
                 <Button
                     android:id="@+id/button_wifi_p2p"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Wifi P2P"
+                    android:text="Wi-Fi P2P"
+                    app:icon="@drawable/ic_baseline_people_outline_24" />
+
+                <Button
+                    android:id="@+id/button_wifi_suggestions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wi-Fi Suggestions"
                     app:icon="@drawable/ic_baseline_people_outline_24" />
 
             </LinearLayout>

@@ -111,11 +111,11 @@ class WifiP2pViewModel @ViewModelInject constructor(
                     onComplete(f, "File received: $filename")
                 }
             } catch (e: IOException) {
-                onComplete(null, e.message)
                 Log.wtf(TAG, e.message)
+                onComplete(null, null)
             } catch (e: Exception) {
-                onComplete(null, e.message)
                 Log.wtf(TAG, e.message)
+                onComplete(null, null)
             }
         }
     }

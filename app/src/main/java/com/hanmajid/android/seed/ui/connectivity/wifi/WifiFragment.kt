@@ -80,6 +80,12 @@ class WifiFragment : Fragment() {
             )
         }
 
+        binding.buttonWifiSuggestions.setOnClickListener {
+            findNavController().navigate(
+                WifiFragmentDirections.actionWifiFragmentToWifiSuggestionFragment()
+            )
+        }
+
         val intentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 refreshUI()

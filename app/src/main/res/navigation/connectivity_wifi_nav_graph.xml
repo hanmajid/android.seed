@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_wifi_fragment_to_wifiP2pFragment"
             app:destination="@id/wifi_p2p_fragment" />
+        <action
+            android:id="@+id/action_wifi_fragment_to_wifiSuggestionFragment"
+            app:destination="@id/wifi_suggestion_fragment" />
     </fragment>
     <fragment
         android:id="@+id/wifi_scan_fragment"
@@ -27,4 +30,9 @@
         android:name="com.hanmajid.android.seed.ui.connectivity.wifi.p2p.WifiP2pFragment"
         android:label="Wi-Fi P2P"
         tools:layout="@layout/fragment_wifi_p2p" />
+    <fragment
+        android:id="@+id/wifi_suggestion_fragment"
+        android:name="com.hanmajid.android.seed.ui.connectivity.wifi.suggestion.WifiSuggestionFragment"
+        android:label="Wi-Fi Suggestions"
+        tools:layout="@layout/fragment_wifi_suggestion" />
 </navigation>

@@ -45,7 +45,7 @@ class ExploreFragment : Fragment() {
             )
         }
 
-        binding.wifiButton.setOnClickListener {
+        binding.connectivityButton.setOnClickListener {
             findNavController().navigate(
                 ExploreFragmentDirections.actionExploreFragmentToConnectivityNavGraph()
             )
