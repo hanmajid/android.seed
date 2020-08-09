@@ -39,13 +39,10 @@
         android:id="@+id/explore_fragment"
         android:name="com.hanmajid.android.seed.ui.explore.ExploreFragment"
         android:label="@string/title_explore"
-        tools:layout="@layout/fragment_explore" >
+        tools:layout="@layout/fragment_explore">
         <action
             android:id="@+id/action_explore_fragment_to_userGuideActivity"
             app:destination="@id/userGuideActivity" />
-        <action
-            android:id="@+id/action_explore_fragment_to_connectivity_nav_graph"
-            app:destination="@id/connectivity_nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/post_fragment"
@@ -63,22 +60,25 @@
         android:id="@+id/user_fragment"
         android:name="com.hanmajid.android.seed.ui.user.UserFragment"
         android:label="@string/title_user"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <argument
             android:name="userId"
             app:argType="string" />
     </fragment>
-    <action android:id="@+id/action_global_user_fragment" app:destination="@id/user_fragment" />
+    <action
+        android:id="@+id/action_global_user_fragment"
+        app:destination="@id/user_fragment" />
     <fragment
         android:id="@+id/camera_fragment"
         android:name="com.hanmajid.android.seed.ui.camera.CameraFragment"
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" />
-    <action android:id="@+id/action_global_cameraFragment" app:destination="@id/camera_fragment" />
+    <action
+        android:id="@+id/action_global_cameraFragment"
+        app:destination="@id/camera_fragment" />
     <activity
         android:id="@+id/userGuideActivity"
         android:name="com.hanmajid.android.seed.ui.userguide.UserGuideActivity"
         android:label="activity_user_guide"
         tools:layout="@layout/activity_user_guide" />
-    <include app:graph="@navigation/connectivity_nav_graph" />
 </navigation>

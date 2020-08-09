@@ -45,12 +45,6 @@ class ExploreFragment : Fragment() {
             )
         }
 
-        binding.connectivityButton.setOnClickListener {
-            findNavController().navigate(
-                ExploreFragmentDirections.actionExploreFragmentToConnectivityNavGraph()
-            )
-        }
-
         // TODO: Security > Show an app chooser
         binding.shareButton.setOnClickListener {
             val callIntent: Intent = Uri.parse("tel:5551234").let { number ->

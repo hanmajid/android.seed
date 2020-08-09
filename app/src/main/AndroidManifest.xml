@@ -4,21 +4,7 @@
 
     <uses-feature android:name="android.hardware.camera.any" />
 
-    <!-- Wifi state, Wifi scanning, Wifi p2p -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- Wifi state, Wifi scanning, Wifi p2p -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- Wifi scanning, Wifi p2p -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!-- Wifi p2p -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Wifi p2p -->
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-
-    <!-- Wifi scanning, Wifi p2p -->
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- CameraX -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -53,16 +39,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/chat_widget_info" />
         </receiver>
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.hanmajid.android.seed.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
     </application>
 
 </manifest>
