@@ -23,13 +23,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.progressindicator.ProgressIndicator
-            android:id="@+id/progress_bar"
-            style="@style/Widget.MaterialComponents.ProgressIndicator.Linear.Indeterminate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <WebView
             android:id="@+id/web_view"
             webViewLoadDataWithBaseUrl="@{model}"

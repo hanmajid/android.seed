@@ -1,5 +1,6 @@
 package com.hanmajid.android.seed.ui
 
+import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
@@ -60,7 +61,7 @@ class AuthViewModel @ViewModelInject constructor(
     val isFinishedOnboarding = MutableLiveData<Boolean>(true)
 
     val authenticationState =
-        MutableLiveData<AuthenticationState>(AuthenticationState.AUTHENTICATED)
+        MutableLiveData<AuthenticationState>(AuthenticationState.UNAUTHENTICATED)
 
     fun setUser(user: User) {
         loggedInUser.postValue(user)
@@ -88,12 +89,20 @@ class AuthViewModel @ViewModelInject constructor(
         authenticationState.value = AuthenticationState.UNAUTHENTICATED
     }
 
+    val isLoadingLogin = MutableLiveData<Boolean>(false)
+
     fun authLogin(loginForm: LoginForm) {
         // TODO: Authenticate with API.
-        if (loginForm.username.value!!.isNotEmpty()) {
-            authenticationState.value = AuthenticationState.AUTHENTICATED
-        } else {
-            authenticationState.value = AuthenticationState.INVALID_AUTHENTICATION
+        isLoadingLogin.postValue(true)
+        Log.wtf(TAG, "Login...")
+        viewModelScope.launch(Dispatchers.IO) {
+            Thread.sleep(2000)
+            if (loginForm.username.value!!.isNotEmpty()) {
+                authenticationState.postValue(AuthenticationState.AUTHENTICATED)
+            } else {
+                authenticationState.postValue(AuthenticationState.INVALID_AUTHENTICATION)
+            }
+            isLoadingLogin.postValue(false)
         }
     }
 

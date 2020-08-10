@@ -13,9 +13,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.hanmajid.android.seed.databinding.FragmentLoginBinding
 import com.hanmajid.android.seed.ui.AuthViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
+//@AndroidEntryPoint
 class LoginFragment : Fragment() {
     private val authViewModel: AuthViewModel by activityViewModels()
     private val viewModel: LoginViewModel by viewModels()
@@ -69,6 +68,7 @@ class LoginFragment : Fragment() {
 
     private fun setupBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.authViewModel = authViewModel
         binding.viewModel = viewModel
         binding.btnRegister.setOnClickListener {
             viewModel.refuseLogin()

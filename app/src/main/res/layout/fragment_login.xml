@@ -7,6 +7,10 @@
     <data>
 
         <variable
+            name="authViewModel"
+            type="com.hanmajid.android.seed.ui.AuthViewModel" />
+
+        <variable
             name="viewModel"
             type="com.hanmajid.android.seed.ui.auth.login.LoginViewModel" />
     </data>
@@ -19,12 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/page_horizontal_margin"
-            android:layout_marginLeft="24dp"
             android:layout_marginEnd="@dimen/page_horizontal_margin"
-            android:layout_marginRight="@dimen/page_horizontal_margin"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/title_login"
                 style="@style/TextAppearance.MaterialComponents.Headline4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -77,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
+                android:enabled="@{!authViewModel.isLoadingLogin}"
                 android:onClick="@{() -> viewModel.doLogin()}"
                 android:text="@string/title_login" />
 

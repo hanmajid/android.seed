@@ -12,7 +12,6 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.google.android.material.progressindicator.ProgressIndicator
 import com.hanmajid.android.seed.R
 import com.hanmajid.android.seed.databinding.ActivityUserGuideBinding
 import com.hanmajid.android.seed.util.webkit.WebKitLoadDataWithBaseUrlModel
@@ -49,7 +48,7 @@ class UserGuideActivity : AppCompatActivity() {
                 "</body>" +
                 "</html>"
 
-        binding.webView.webViewClient = MyWebViewClient(this, binding.progressBar)
+        binding.webView.webViewClient = MyWebViewClient(this)
 
         // WebSettings
         binding.webView.settings.apply {
@@ -73,8 +72,8 @@ class UserGuideActivity : AppCompatActivity() {
     }
 
     class MyWebViewClient(
-        private val context: Context,
-        private val progressBar: ProgressIndicator
+        private val context: Context
+//        private val progressBar: ProgressIndicator
     ) : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(
@@ -93,12 +92,12 @@ class UserGuideActivity : AppCompatActivity() {
         }
 
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-            progressBar.show()
+//            progressBar.show()
             return super.onPageStarted(view, url, favicon)
         }
 
         override fun onPageFinished(view: WebView?, url: String?) {
-            progressBar.hide()
+//            progressBar.hide()
             return super.onPageFinished(view, url)
         }
     }

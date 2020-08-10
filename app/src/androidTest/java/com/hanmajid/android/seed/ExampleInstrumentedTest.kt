@@ -2,12 +2,6 @@ package com.hanmajid.android.seed
 
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import org.junit.Rule
@@ -38,7 +32,7 @@ class ExampleInstrumentedTest {
 //            Navigation.setViewNavController(it.requireView(), navController)
 //        }
 
-        onView(ViewMatchers.withId(R.id.btn_chat_1)).perform(ViewActions.click())
-        onView(withText("69")).check(matches(isDisplayed()))
+//        onView(ViewMatchers.withId(R.id.btn_chat_1)).perform(ViewActions.click())
+//        onView(withText("69")).check(matches(isDisplayed()))
     }
 }
